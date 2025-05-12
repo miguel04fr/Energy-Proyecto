@@ -45,6 +45,12 @@
                         <button type="submit" name="misHorarios" value="misHorarios">Mis Horarios</button>
                         <button type="submit" name="misAlumnos" value="misAlumnos">Mis Alumnos</button>
                     </c:if>
+                    <c:if test="${sessionScope.usuarioLogueado.rol == 'GERENTE'}">
+                        <button type="submit" name="listarHorarios" value="listarHorarios">Horarios</button>
+                        <button type="submit" name="listarEntrenadores" value="listarEntrenadores">Entrenadores</button>
+                        <button type="submit" name="modificarEntrenadores" value="modificarEntrenadores">Modificar Entrenadores</button>
+                        <button type="submit" name="darAltaBaja" value="darAltaBaja">dar de alta/baja alumnos</button>
+                    </c:if>
                 </c:if>
             
             </form>
