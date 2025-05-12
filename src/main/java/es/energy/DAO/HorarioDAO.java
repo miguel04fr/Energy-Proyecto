@@ -14,7 +14,7 @@ public class HorarioDAO implements IHorarioDAO {
 
     @Override
     public void agregarHorario(Horario horario) throws SQLException {
-        String sql = "INSERT INTO horarios (DeporteId, DiaSemana, Hora, SalaId, EntrenadorId, PlazasOfertadas) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO horarios (DeporteId, DiaSemana, Hora, SalaId, EntrenadorId, PlazasOfertadas, PlazasOcupadas) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = ConnectionFactory.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -24,6 +24,7 @@ public class HorarioDAO implements IHorarioDAO {
             stmt.setInt(4, horario.getSalaId());
             stmt.setInt(5, horario.getEntrenadorId());
             stmt.setInt(6, horario.getPlazasOfertadas());
+            stmt.setInt(7, horario.getPlazasOcupadas());
 
             stmt.executeUpdate();
         }
@@ -80,7 +81,7 @@ public class HorarioDAO implements IHorarioDAO {
 
     @Override
     public void actualizarHorario(Horario horario) throws SQLException {
-        String sql = "UPDATE horarios SET DeporteId = ?, DiaSemana = ?, Hora = ?, SalaId = ?, EntrenadorId = ?, PlazasOfertadas = ? WHERE Id = ?";
+        String sql = "UPDATE horarios SET DeporteId = ?, DiaSemana = ?, Hora = ?, SalaId = ?, EntrenadorId = ?, PlazasOfertadas = ?, PlazasOcupadas = ? WHERE Id = ?";
         try (Connection con = ConnectionFactory.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
 
@@ -90,7 +91,8 @@ public class HorarioDAO implements IHorarioDAO {
             stmt.setInt(4, horario.getSalaId());
             stmt.setInt(5, horario.getEntrenadorId());
             stmt.setInt(6, horario.getPlazasOfertadas());
-            stmt.setInt(7, horario.getId());
+            stmt.setInt(7, horario.getPlazasOcupadas());
+            stmt.setInt(8, horario.getId());
 
             stmt.executeUpdate();
         }
@@ -125,6 +127,7 @@ public class HorarioDAO implements IHorarioDAO {
                 horario.setSalaId(rs.getInt("SalaId"));
                 horario.setEntrenadorId(rs.getInt("EntrenadorId"));
                 horario.setPlazasOfertadas(rs.getInt("PlazasOfertadas"));
+                horario.setPlazasOcupadas(rs.getInt("PlazasOcupadas"));
                 horarios.add(horario);
             }
         }
@@ -158,6 +161,7 @@ public class HorarioDAO implements IHorarioDAO {
         horario.setSalaId(rs.getInt("SalaId"));
         horario.setEntrenadorId(rs.getInt("EntrenadorId"));
         horario.setPlazasOfertadas(rs.getInt("PlazasOfertadas"));
+        horario.setPlazasOcupadas(rs.getInt("PlazasOcupadas"));
         return horario;
     }
 }

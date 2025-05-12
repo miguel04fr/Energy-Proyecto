@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.beanutils.converters.DateConverter;
 
 import es.energy.DAO.IDeporteDAO;
 import es.energy.DAO.IHorarioDAO;
@@ -57,7 +60,9 @@ public class Update extends HttpServlet {
         List<Sala> listaSalas = new ArrayList<>();
         ISalaDAO salaDAO = daof.getSalaDAO();
         List<Horario> listaHorarios = new ArrayList<>();
-        
+        List<Usuario> listaEntrenadores = new ArrayList<>();
+        Usuario entrenador = new Usuario();
+
         if (request.getParameter("actualizarSala") != null) {
                 try {
                     BeanUtils.populate(sala, request.getParameterMap());
@@ -102,12 +107,54 @@ public class Update extends HttpServlet {
             request.setAttribute("mensaje", "Estado del usuario actualizado correctamente");
             listaUsuarios = usuarioDAO.obtenerUsuariosPorRolCliente();
             request.setAttribute("listaUsuarios", listaUsuarios);
-            url = "JSP/admin/modificarEntrenadores.jsp";
+            url = "JSP/gerente/altaBajaUsuarios.jsp";
            } catch (SQLException ex) {
             Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
            }
            
-        }
+        }else if (request.getParameter("cambiarEstadoEntrenador") != null) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            boolean activo = Boolean.TRUE;
+            String cambiarEstado = request.getParameter("cambiarEstadoEntrenador");
+            if(cambiarEstado.equals("true")){
+             activo = Boolean.TRUE;
+            }else{
+              activo = Boolean.FALSE;
+            }
+            try {
+             usuarioDAO.cambiarEstado(id, activo);
+             request.setAttribute("mensaje", "Estado del usuario actualizado correctamente");
+             listaEntrenadores = usuarioDAO.obtenerUsuariosPorRolEntrenador();
+             request.setAttribute("listaEntrenadores", listaEntrenadores);
+             url = "JSP/gerente/modificarEntrenadores.jsp";
+            } catch (SQLException ex) {
+             Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+         }else if (request.getParameter("editarEntrenador") != null) {
+            int id = Integer.parseInt(request.getParameter("id"));
+             entrenador = usuarioDAO.obtenerUsuarioPorId(id);
+            request.setAttribute("entrenador", entrenador);
+            url = "JSP/gerente/editarEntrenador.jsp";
+         }else if (request.getParameter("guardarEntrenador") != null) {
+            try {
+                int id = Integer.parseInt(request.getParameter("id"));
+                entrenador = usuarioDAO.obtenerUsuarioPorId(id);
+                DateConverter converter = new DateConverter();
+                converter.setPattern("yyyy-MM-dd");
+                ConvertUtils.register(converter, Date.class);
+                BeanUtils.populate(entrenador, request.getParameterMap());
+                usuarioDAO.actualizar(entrenador);
+                request.setAttribute("mensaje", "Entrenador actualizado correctamente");
+                listaEntrenadores = usuarioDAO.obtenerUsuariosPorRolEntrenador();
+                request.setAttribute("listaEntrenadores", listaEntrenadores);
+                url = "JSP/gerente/modificarEntrenadores.jsp";
+            } catch (IllegalAccessException | InvocationTargetException ex) {
+                Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+            }   catch (SQLException ex) {
+                    Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+                }
+         }
         request.getRequestDispatcher(url).forward(request, response);
     }
 

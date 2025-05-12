@@ -19,13 +19,14 @@ public class Horario {
     private int salaId;
     private int entrenadorId;
     private int plazasOfertadas;
+    private int plazasOcupadas;
     private Deporte deporte;
     private Usuario usuario;
 
     public Horario() {
     }
 
-    public Horario(int id, int deporteId, String diaSemana, Time hora, int salaId, int entrenadorId, int plazasOfertadas) {
+    public Horario(int id, int deporteId, String diaSemana, Time hora, int salaId, int entrenadorId, int plazasOfertadas, int plazasOcupadas) {
         this.id = id;
         this.deporteId = deporteId;
         this.diaSemana = diaSemana;
@@ -33,6 +34,7 @@ public class Horario {
         this.salaId = salaId;
         this.entrenadorId = entrenadorId;
         this.plazasOfertadas = plazasOfertadas;
+        this.plazasOcupadas = plazasOcupadas;
     }
 
     public int getId() {
@@ -89,6 +91,14 @@ public class Horario {
 
     public void setPlazasOfertadas(int plazasOfertadas) {
         this.plazasOfertadas = plazasOfertadas;
+    }
+
+    public int getPlazasOcupadas() {
+        return plazasOcupadas;
+    }
+
+    public void setPlazasOcupadas(int plazasOcupadas) {
+        this.plazasOcupadas = plazasOcupadas;
     }
 
     public Deporte getDeporte() {

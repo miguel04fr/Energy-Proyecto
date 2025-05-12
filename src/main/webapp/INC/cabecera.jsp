@@ -61,7 +61,9 @@
                     <div class="user-menu">
                         <span class="user-name">${sessionScope.usuarioLogueado.nombre}</span>
                         <form action="FrontController" method="post">
-                            <button type="submit" name="cerrarSesion" value="cerrarSesion">Cerrar Sesión</button>
+                            <button type="submit" name="cerrarSesion" value="cerrarSesion" class="cerrar-sesion">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Cerrar Sesión</button>
                         </form>
                     </div>
                 </c:when>

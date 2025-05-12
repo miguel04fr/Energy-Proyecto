@@ -55,6 +55,7 @@ public class Delete extends HttpServlet {
         List<Horario> listaHorarios = new ArrayList<>();
         List<Sala> listaSalas = new ArrayList<>();
         List<Usuario> listaUsuarios = new ArrayList<>();
+        List<Usuario> listaEntrenadores = new ArrayList<>();
         List<Deporte> listaDeportes = new ArrayList<>();
        
         if (request.getParameter("eliminarHorario") != null) {
@@ -103,7 +104,7 @@ public class Delete extends HttpServlet {
             }
             url = "JSP/admin/eliminarGerente.jsp";
         }
-        if (request.getParameter("eliminarDeporte") != null) {
+      else  if (request.getParameter("eliminarDeporte") != null) {
             try {
                 int idDeporte = Integer.parseInt(request.getParameter("id"));
                 deporteDAO.eliminarDeporte(idDeporte);
@@ -111,6 +112,28 @@ public class Delete extends HttpServlet {
                 listaDeportes = deporteDAO.obtenerTodosLosDeportes();
                 request.setAttribute("listaDeportes", listaDeportes);
                 url = "JSP/admin/modificarDeportes.jsp";
+            } catch (SQLException ex) {
+                Logger.getLogger(Delete.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+       else if (request.getParameter("eliminarEntrenador") != null) {
+            int entrenadorId = Integer.parseInt(request.getParameter("id"));
+            usuarioDAO.eliminar(entrenadorId);
+            try {
+                listaEntrenadores = usuarioDAO.obtenerUsuariosPorRolEntrenador();
+                request.setAttribute("listaEntrenadores", listaEntrenadores);
+                url = "JSP/gerente/modificarEntrenadores.jsp";
+            } catch (SQLException ex) {
+                Logger.getLogger(Delete.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+     else   if (request.getParameter("eliminarUsuario") != null) {
+            int usuarioId = Integer.parseInt(request.getParameter("id"));
+            usuarioDAO.eliminar(usuarioId);
+            try {
+                listaUsuarios = usuarioDAO.obtenerUsuariosPorRolCliente();
+                request.setAttribute("listaUsuarios", listaUsuarios);
+                url = "JSP/gerente/altaBajaUsuarios.jsp";
             } catch (SQLException ex) {
                 Logger.getLogger(Delete.class.getName()).log(Level.SEVERE, null, ex);
             }

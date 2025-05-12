@@ -279,7 +279,7 @@ public class FrontController extends HttpServlet {
             try {
                 listaEntrenadores = usuarioDAO.obtenerUsuariosPorRolEntrenador();
                 request.setAttribute("listaEntrenadores", listaEntrenadores);
-                url = "JSP/admin/modificarEntrenadores.jsp";
+                url = "JSP/gerente/modificarEntrenadores.jsp";
             } catch (SQLException ex) {
                 Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -287,7 +287,7 @@ public class FrontController extends HttpServlet {
             try {
                 listaUsuarios = usuarioDAO.obtenerUsuariosPorRolCliente();
                 request.setAttribute("listaUsuarios", listaUsuarios);
-                url = "JSP/admin/modificarEntrenadores.jsp";
+                url = "JSP/gerente/altaBajaUsuarios.jsp";
             } catch (SQLException ex) {
                 Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
             }

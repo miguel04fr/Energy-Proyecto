@@ -27,7 +27,13 @@
   padding: 0;
   box-sizing: border-box;
 }
-
+.cerrar-sesion{
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 10px 20px;
+}
 html,
 body {
   width: 100%;
