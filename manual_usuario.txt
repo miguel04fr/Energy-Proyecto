@@ -1,0 +1,194 @@
+MANUAL DE USUARIO - APLICACIÓN ENERGY
+Sistema de Gestión de Actividades Deportivas
+1. INTRODUCCIÓN
+La aplicación web Energy ha sido diseñada para facilitar la gestión integral de actividades deportivas en un centro o gimnasio. A través de una interfaz intuitiva y moderna, los usuarios podrán descubrir, inscribirse, consultar horarios y gestionar su participación en clases guiadas en deportes como Zumba, Tenis, Pádel, etc.. Este manual tiene como objetivo proporcionar una guía completa sobre el uso de la plataforma.
+
+2. ACCESO A LA APLICACIÓN
+2.1 Página Principal
+Para comenzar a usar la aplicación:
+
+Abre tu navegador web preferido (Chrome, Firefox, Edge, Safari…).
+
+Introduce la URL correspondiente a la aplicación (por ejemplo: www.energy.com).
+
+Al cargar la página principal, encontrarás:
+
+Un banner informativo con las últimas noticias o novedades.
+
+Un carrusel visual que destaca los deportes disponibles.
+
+Un menú de navegación situado en la parte superior.
+
+Accesos a Inicio de Sesión y Registro de Usuario.
+
+2.2 Registro de Usuario
+Para poder inscribirse en actividades es necesario registrarse.
+Pasos para crear una cuenta:
+
+Haz clic en "Registrarse".
+
+Completa el formulario con la siguiente información:
+
+DNI (formato: 8 dígitos + 1 letra mayúscula, ejemplo: 12345678A).
+
+Nombre (solo letras, sin números ni símbolos).
+
+Apellidos.
+
+Fecha de nacimiento (usuarios menores de edad no podrán registrarse).
+
+Email válido.
+
+Teléfono (9 dígitos, comenzando por 6, 7, 8 o 9).
+
+IBAN bancario (formato correcto exigido).
+
+Contraseña segura (mínimo 8 caracteres, letras y números).
+
+Confirmación de contraseña.
+
+Marca la casilla de aceptación de términos y condiciones.
+
+Haz clic en "Crear Cuenta" para finalizar el registro.
+
+2.3 Inicio de Sesión
+Si ya tienes una cuenta:
+
+Pulsa "Iniciar Sesión".
+
+Introduce tu email y contraseña.
+
+
+Haz clic en "Acceder".
+
+3. NAVEGACIÓN PRINCIPAL
+3.1 Menú Superior
+Desde el menú principal puedes acceder a:
+
+Inicio: Página principal de bienvenida.
+
+Deportes: Lista de actividades deportivas disponibles.
+
+Inscripciones: Panel personal para apuntarse o cancelar actividades.
+
+Horarios: Consulta de horarios y disponibilidad.
+
+Entrenadores: Ficha informativa de los monitores y entrenadores.
+
+3.2 Carrusel de Deportes
+Muestra una vista previa de los deportes disponibles.
+
+Cada deporte incluye:
+
+Imagen ilustrativa.
+
+Nombre.
+
+Descripción breve.
+
+Botón para ver horarios o inscribirse.
+
+4. FUNCIONALIDADES PRINCIPALES
+4.1 Gestión de Deportes
+Consulta información detallada sobre cada deporte.
+
+Visualiza horarios y entrenadores asignados .
+
+Realiza inscripción con solo unos clics.
+
+4.2 Inscripciones
+Una vez registrado e identificado, accede a la sección de Inscripciones.
+
+Elige el deporte y horario.
+
+Pulsa en “Inscribirme” para confirmar.
+
+Puedes visualizar o cancelar tus inscripciones activas.
+
+4.3 Horarios
+Consulta horarios según el deporte elegido.
+
+Filtro por día de la semana o franja horaria.
+
+Visualiza plazas disponibles en tiempo real.
+
+
+4.4 Entrenadores
+Muestra una lista completa de entrenadores.
+
+Perfil con información como:
+
+Nombre, especialidad, teléfono o email.
+
+Horarios en los que imparte clases.
+
+
+5. CARACTERÍSTICAS ADICIONALES
+5.1 Modo Oscuro/Claro
+Cambia el aspecto visual según tu preferencia.
+
+Ideal para proteger la vista en ambientes con poca o mucha luz.
+
+
+5.2 Navegación Responsiva
+Totalmente adaptado a cualquier tipo de pantalla:
+
+Ordenadores.
+
+Tablets.
+
+Teléfonos móviles.
+
+Menús adaptados en formato hamburguesa para móviles.
+
+Carga rápida y diseño limpio.
+
+5.3 Notificaciones
+Notificaciones automáticas por email o dentro de la app:
+
+Confirmación de inscripciones.
+
+
+
+6. GESTIÓN DE CUENTA
+6.1 Perfil de Usuario
+Desde tu panel de usuario podrás:
+
+Modificar tus datos personales (nombre, email, teléfono...).
+
+Cambiar contraseña.
+
+
+Consultar historial de inscripciones.
+
+Gestionar tus métodos de pago o IBAN.
+
+6.2 Cerrar Sesión
+Haz clic en tu nombre (parte superior derecha).
+
+Selecciona "Cerrar Sesión".
+
+Por seguridad, se recomienda cerrar sesión especialmente en dispositivos públicos.
+
+7. AYUDAS Y SOPORTE
+7.1 Preguntas Frecuentes (FAQ)
+Sección de respuestas rápidas sobre:
+
+Cómo registrarse.
+
+Cómo apuntarse o cancelar una clase.
+
+Contacto con entrenadores o administración.
+
+7.2 Contacto
+Si necesitas ayuda personalizada:
+
+Email: soporte@energy.com
+
+Teléfono: +34 123 456 789
+
+Horario de atención: Lunes a Viernes de 09:00 a 18:00
+
+8. Mejoras futuras versiones
+
+© 2024–2025 Energy. Todos los derechos reservados. Prohibida su reproducción total o parcial sin autorización expresa.
