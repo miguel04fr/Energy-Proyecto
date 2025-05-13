@@ -93,7 +93,9 @@ public class Create extends HttpServlet {
                 converter.setPattern("yyyy-MM-dd");
                 ConvertUtils.register(converter, Date.class);
                 usuario.setRol(Usuario.Rol.USUARIO);
+                usuario.setActivo(false);
                 BeanUtils.populate(usuario, request.getParameterMap());
+                request.setAttribute("usuario", usuario);
                 try {
                     // Encriptar la contraseña
                     usuario.setClave(Utils.md5(usuario.getClave()));
@@ -160,6 +162,8 @@ public class Create extends HttpServlet {
                 
                 // Obtener información del usuario y el horario
                 Horario horarioInscripcion = horarioDAO.obtenerHorarioPorId(inscripcion.getHorarioId());
+                horarioInscripcion.setPlazasOcupadas(horarioInscripcion.getPlazasOcupadas() + 1);
+                horarioDAO.actualizarHorario(horarioInscripcion);
                 Deporte deporteInscripcion = deporteDAO.obtenerDeportePorId(horarioInscripcion.getDeporteId());
                 
                 // Enviar correo de confirmación
@@ -179,6 +183,7 @@ public class Create extends HttpServlet {
                 ConvertUtils.register(converter, Date.class);
                 usuario.setRol(Usuario.Rol.GERENTE);
                 BeanUtils.populate(usuario, request.getParameterMap());
+                request.setAttribute("usuario", usuario);
                 try {
                     // Encriptar la contraseña
                     usuario.setClave(Utils.md5(usuario.getClave()));

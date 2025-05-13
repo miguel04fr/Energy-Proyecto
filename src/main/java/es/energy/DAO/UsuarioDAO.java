@@ -15,68 +15,131 @@ public class UsuarioDAO implements IUsuarioDAO {
     @Override
     public void insertar(Usuario usuario) throws SQLException {
         String sql = "INSERT INTO usuarios (Dni, FechaNacimiento, Nombre, Apellido, Email, Clave, Telefono, Rol, IBAN, Activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection con = ConnectionFactory.getConnection(); PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setString(1, usuario.getDni());
-            stmt.setDate(2, new java.sql.Date(usuario.getFechaNacimiento().getTime()));
-            stmt.setString(3, usuario.getNombre());
-            stmt.setString(4, usuario.getApellido());
-            stmt.setString(5, usuario.getEmail());
-            stmt.setString(6, usuario.getClave());
-            stmt.setString(7, usuario.getTelefono());
-            stmt.setString(8, usuario.getRol().toString());
-            stmt.setString(9, usuario.getIban());
-            stmt.setBoolean(10, usuario.isActivo());
-            stmt.executeUpdate();
+        Connection con = null;
+        try {
+            con = ConnectionFactory.getConnection();
+            con.setAutoCommit(false);
+            try (PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.setString(1, usuario.getDni());
+                stmt.setDate(2, new java.sql.Date(usuario.getFechaNacimiento().getTime()));
+                stmt.setString(3, usuario.getNombre());
+                stmt.setString(4, usuario.getApellido());
+                stmt.setString(5, usuario.getEmail());
+                stmt.setString(6, usuario.getClave());
+                stmt.setString(7, usuario.getTelefono());
+                stmt.setString(8, usuario.getRol().toString());
+                stmt.setString(9, usuario.getIban());
+                stmt.setBoolean(10, usuario.isActivo());
+                stmt.executeUpdate();
+                con.commit();
+            }
         } catch (SQLException e) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    throw new SQLException("Error al hacer rollback: " + ex.getMessage());
+                }
+            }
             String message = e.getMessage();
-            // Determinar el tipo de error
             if (message.contains("Duplicate entry") && message.contains("usuarios.Dni")) {
-                String dni = message.split("'")[1]; // Esto toma el valor '12345678A'
-
-                // Lanzar tu mensaje personalizado
+                String dni = message.split("'")[1];
                 throw new SQLException("El DNI " + dni + " ya está registrado en el sistema.", e);
             } else if (message.contains("Duplicate entry") && message.contains("usuarios.Email")) {
-                String email = message.split("'")[1]; // Esto toma el valor '12345678A'
+                String email = message.split("'")[1];
                 throw new SQLException("El email " + email + " ya está registrado en el sistema.", e);
             } else if (message.contains("Duplicate entry") && message.contains("usuarios.IBAN")) {
-                String iban = message.split("'")[1]; // Esto toma el valor '12345678A'
+                String iban = message.split("'")[1];
                 throw new SQLException("El IBAN " + iban + " ya está registrado en el sistema.", e);
             } else {
                 throw new SQLException("Error al insertar el usuario: " + e.getMessage(), e);
+            }
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
     // Actualizar un usuario
     @Override
-    public void actualizar(Usuario usuario) {
+    public void actualizar(Usuario usuario) throws SQLException {
         String sql = "UPDATE usuarios SET Dni = ?, FechaNacimiento = ?, Nombre = ?, Apellido = ?, Email = ?, Clave = ?, Telefono = ?, IBAN = ?, Activo = ? WHERE Id = ?";
-        try (Connection con = ConnectionFactory.getConnection(); PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setString(1, usuario.getDni());
-            stmt.setDate(2, new java.sql.Date(usuario.getFechaNacimiento().getTime()));
-            stmt.setString(3, usuario.getNombre());
-            stmt.setString(4, usuario.getApellido());
-            stmt.setString(5, usuario.getEmail());
-            stmt.setString(6, usuario.getClave());
-            stmt.setString(7, usuario.getTelefono());
-            stmt.setString(8, usuario.getIban());
-            stmt.setBoolean(9, usuario.isActivo());
-            stmt.setInt(10, usuario.getId());
-            stmt.executeUpdate();
+        Connection con = null;
+        try {
+            con = ConnectionFactory.getConnection();
+            con.setAutoCommit(false);
+            try (PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.setString(1, usuario.getDni());
+                stmt.setDate(2, new java.sql.Date(usuario.getFechaNacimiento().getTime()));
+                stmt.setString(3, usuario.getNombre());
+                stmt.setString(4, usuario.getApellido());
+                stmt.setString(5, usuario.getEmail());
+                stmt.setString(6, usuario.getClave());
+                stmt.setString(7, usuario.getTelefono());
+                stmt.setString(8, usuario.getIban());
+                stmt.setBoolean(9, usuario.isActivo());
+                stmt.setInt(10, usuario.getId());
+                stmt.executeUpdate();
+                con.commit();
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    throw new SQLException("Error al hacer rollback: " + ex.getMessage());
+                }
+            }
+            throw e;
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     // Eliminar un usuario
     @Override
-    public void eliminar(int id) {
+    public void eliminar(int id) throws SQLException {
         String sql = "DELETE FROM usuarios WHERE Id = ?";
-        try (Connection con = ConnectionFactory.getConnection(); PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
+        Connection con = null;
+        try {
+            con = ConnectionFactory.getConnection();
+            con.setAutoCommit(false);
+            try (PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.setInt(1, id);
+                stmt.executeUpdate();
+                con.commit();
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    throw new SQLException("Error al hacer rollback: " + ex.getMessage());
+                }
+            }
+            throw e;
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

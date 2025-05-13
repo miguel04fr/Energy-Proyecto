@@ -53,16 +53,38 @@ public class SalaDAO implements ISalaDAO {
     @Override
     public void insertar(Sala sala) throws SQLException {
         String sql = "INSERT INTO salas (IdSala, Descripcion) VALUES (?, ?)";
-        
-        try (Connection con = ConnectionFactory.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setInt(1, sala.getIdSala());
-            stmt.setString(2, sala.getDescripcion());
-            stmt.executeUpdate();
-            
-            try (ResultSet rs = stmt.getGeneratedKeys()) {
-                if (rs.next()) {
-                    sala.setIdSala(rs.getInt(1));
+        Connection con = null;
+        try {
+            con = ConnectionFactory.getConnection();
+            con.setAutoCommit(false);
+            try (PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                stmt.setInt(1, sala.getIdSala());
+                stmt.setString(2, sala.getDescripcion());
+                stmt.executeUpdate();
+                con.commit();
+                
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        sala.setIdSala(rs.getInt(1));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    throw new SQLException("Error al hacer rollback: " + ex.getMessage());
+                }
+            }
+            throw e;
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -71,23 +93,67 @@ public class SalaDAO implements ISalaDAO {
     @Override
     public void actualizar(Sala sala) throws SQLException {
         String sql = "UPDATE salas SET Descripcion = ? WHERE IdSala = ?";
-        
-        try (Connection con = ConnectionFactory.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setString(1, sala.getDescripcion());
-            stmt.setInt(2, sala.getIdSala());
-            stmt.executeUpdate();
+        Connection con = null;
+        try {
+            con = ConnectionFactory.getConnection();
+            con.setAutoCommit(false);
+            try (PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.setString(1, sala.getDescripcion());
+                stmt.setInt(2, sala.getIdSala());
+                stmt.executeUpdate();
+                con.commit();
+            }
+        } catch (SQLException e) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    throw new SQLException("Error al hacer rollback: " + ex.getMessage());
+                }
+            }
+            throw e;
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     @Override
     public void eliminar(int id) throws SQLException {
         String sql = "DELETE FROM salas WHERE IdSala = ?";
-        
-        try (Connection con = ConnectionFactory.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
+        Connection con = null;
+        try {
+            con = ConnectionFactory.getConnection();
+            con.setAutoCommit(false);
+            try (PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.setInt(1, id);
+                stmt.executeUpdate();
+                con.commit();
+            }
+        } catch (SQLException e) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    throw new SQLException("Error al hacer rollback: " + ex.getMessage());
+                }
+            }
+            throw e;
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 } 

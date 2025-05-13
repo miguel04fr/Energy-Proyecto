@@ -15,18 +15,39 @@ public class HorarioDAO implements IHorarioDAO {
     @Override
     public void agregarHorario(Horario horario) throws SQLException {
         String sql = "INSERT INTO horarios (DeporteId, DiaSemana, Hora, SalaId, EntrenadorId, PlazasOfertadas, PlazasOcupadas) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection con = ConnectionFactory.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            stmt.setInt(1, horario.getDeporteId());
-            stmt.setString(2, horario.getDiaSemana());
-            stmt.setTime(3, horario.getHora());
-            stmt.setInt(4, horario.getSalaId());
-            stmt.setInt(5, horario.getEntrenadorId());
-            stmt.setInt(6, horario.getPlazasOfertadas());
-            stmt.setInt(7, horario.getPlazasOcupadas());
-
-            stmt.executeUpdate();
+        Connection con = null;
+        try {
+            con = ConnectionFactory.getConnection();
+            con.setAutoCommit(false);
+            try (PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                stmt.setInt(1, horario.getDeporteId());
+                stmt.setString(2, horario.getDiaSemana());
+                stmt.setTime(3, horario.getHora());
+                stmt.setInt(4, horario.getSalaId());
+                stmt.setInt(5, horario.getEntrenadorId());
+                stmt.setInt(6, horario.getPlazasOfertadas());
+                stmt.setInt(7, horario.getPlazasOcupadas());
+                stmt.executeUpdate();
+                con.commit();
+            }
+        } catch (SQLException e) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    throw new SQLException("Error al hacer rollback: " + ex.getMessage());
+                }
+            }
+            throw e;
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -82,30 +103,73 @@ public class HorarioDAO implements IHorarioDAO {
     @Override
     public void actualizarHorario(Horario horario) throws SQLException {
         String sql = "UPDATE horarios SET DeporteId = ?, DiaSemana = ?, Hora = ?, SalaId = ?, EntrenadorId = ?, PlazasOfertadas = ?, PlazasOcupadas = ? WHERE Id = ?";
-        try (Connection con = ConnectionFactory.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-
-            stmt.setInt(1, horario.getDeporteId());
-            stmt.setString(2, horario.getDiaSemana());
-            stmt.setTime(3, horario.getHora());
-            stmt.setInt(4, horario.getSalaId());
-            stmt.setInt(5, horario.getEntrenadorId());
-            stmt.setInt(6, horario.getPlazasOfertadas());
-            stmt.setInt(7, horario.getPlazasOcupadas());
-            stmt.setInt(8, horario.getId());
-
-            stmt.executeUpdate();
+        Connection con = null;
+        try {
+            con = ConnectionFactory.getConnection();
+            con.setAutoCommit(false);
+            try (PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.setInt(1, horario.getDeporteId());
+                stmt.setString(2, horario.getDiaSemana());
+                stmt.setTime(3, horario.getHora());
+                stmt.setInt(4, horario.getSalaId());
+                stmt.setInt(5, horario.getEntrenadorId());
+                stmt.setInt(6, horario.getPlazasOfertadas());
+                stmt.setInt(7, horario.getPlazasOcupadas());
+                stmt.setInt(8, horario.getId());
+                stmt.executeUpdate();
+                con.commit();
+            }
+        } catch (SQLException e) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    throw new SQLException("Error al hacer rollback: " + ex.getMessage());
+                }
+            }
+            throw e;
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     @Override
     public void eliminarHorario(int id) throws SQLException {
         String sql = "DELETE FROM horarios WHERE Id = ?";
-        try (Connection con = ConnectionFactory.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
+        Connection con = null;
+        try {
+            con = ConnectionFactory.getConnection();
+            con.setAutoCommit(false);
+            try (PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.setInt(1, id);
+                stmt.executeUpdate();
+                con.commit();
+            }
+        } catch (SQLException e) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    throw new SQLException("Error al hacer rollback: " + ex.getMessage());
+                }
+            }
+            throw e;
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

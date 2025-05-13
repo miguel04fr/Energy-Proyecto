@@ -22,6 +22,7 @@ public class Horario {
     private int plazasOcupadas;
     private Deporte deporte;
     private Usuario usuario;
+    private Inscripcion inscripcion;
 
     public Horario() {
     }
@@ -114,6 +115,14 @@ public class Horario {
     }
 
     public void setUsuario(Usuario usuario) {
-                this.usuario = usuario;
+        this.usuario = usuario;
+        }
+
+    public Inscripcion getInscripcion() {
+        return inscripcion;
+    }
+
+    public void setInscripcion(Inscripcion inscripcion) {
+        this.inscripcion = inscripcion;
     }
 }

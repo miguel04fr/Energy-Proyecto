@@ -17,17 +17,38 @@ public class DeporteDAO implements IDeporteDAO {
     @Override
     public void agregarDeporte(Deporte deporte) throws SQLException {
         String sql = "INSERT INTO deportes (Nombre, Descripcion) VALUES (?, ?)";
-        try (Connection con = ConnectionFactory.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            
-            stmt.setString(1, deporte.getNombreDeporte());
-            stmt.setString(2, deporte.getDescripcion());
-            stmt.executeUpdate();
-
-            // Obtener ID generado automáticamente
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    deporte.setId(generatedKeys.getInt(1));
+        Connection con = null;
+        try {
+            con = ConnectionFactory.getConnection();
+            con.setAutoCommit(false);
+            try (PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                stmt.setString(1, deporte.getNombreDeporte());
+                stmt.setString(2, deporte.getDescripcion());
+                stmt.executeUpdate();
+                con.commit();
+                
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        deporte.setId(generatedKeys.getInt(1));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    throw new SQLException("Error al hacer rollback: " + ex.getMessage());
+                }
+            }
+            throw e;
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -36,24 +57,68 @@ public class DeporteDAO implements IDeporteDAO {
     @Override
     public void actualizarDeporte(Deporte deporte) throws SQLException {
         String sql = "UPDATE deportes SET Nombre = ?, Descripcion = ? WHERE Id = ?";
-        try (Connection con = ConnectionFactory.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-            
-            stmt.setString(1, deporte.getNombreDeporte());
-            stmt.setString(2, deporte.getDescripcion());
-            stmt.setInt(3, deporte.getId());
-            stmt.executeUpdate();
+        Connection con = null;
+        try {
+            con = ConnectionFactory.getConnection();
+            con.setAutoCommit(false);
+            try (PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.setString(1, deporte.getNombreDeporte());
+                stmt.setString(2, deporte.getDescripcion());
+                stmt.setInt(3, deporte.getId());
+                stmt.executeUpdate();
+                con.commit();
+            }
+        } catch (SQLException e) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    throw new SQLException("Error al hacer rollback: " + ex.getMessage());
+                }
+            }
+            throw e;
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     @Override
     public void eliminarDeporte(int id) throws SQLException {
         String sql = "DELETE FROM deportes WHERE Id = ?";
-        try (Connection con = ConnectionFactory.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
-            
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
+        Connection con = null;
+        try {
+            con = ConnectionFactory.getConnection();
+            con.setAutoCommit(false);
+            try (PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.setInt(1, id);
+                stmt.executeUpdate();
+                con.commit();
+            }
+        } catch (SQLException e) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    throw new SQLException("Error al hacer rollback: " + ex.getMessage());
+                }
+            }
+            throw e;
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

@@ -83,6 +83,8 @@ public class FrontController extends HttpServlet {
         IDeporteDAO deporteDAO = daof.getDeporteDAO();
         IUsuarioDAO usuarioDAO = daof.getUsurioDAO();
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        Horario horario = new Horario();
+        Inscripcion inscripcion = new Inscripcion();
 
         if (request.getParameter("crearInscripcion") != null) {
 
@@ -113,7 +115,20 @@ public class FrontController extends HttpServlet {
             }
 
         } else if (request.getParameter("inicio") != null) {
+            try {
+                listaDeportes = deporteDAO.obtenerTodosLosDeportes();
+                session.setAttribute("listaDeportes", listaDeportes);
+            } catch (SQLException ex) {
+                Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+            }
             url = "index.jsp";
+        } else if (request.getParameter("inicioAdmin") != null) {
+            try {
+                listaDeportes = deporteDAO.obtenerTodosLosDeportes();
+                session.setAttribute("listaDeportes", listaDeportes);
+            } catch (SQLException ex) {
+                Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else if (request.getParameter("consultarInscripcion") != null) {
 
             String nombreDeporte = request.getParameter("selectedSport");
@@ -158,10 +173,17 @@ public class FrontController extends HttpServlet {
             }
         } else if (request.getParameter("listarHorarios") != null) {
             try {
+
                 listaHorarios = horarioDAO.obtenerTodosLosHorarios();
                 for (Horario h : listaHorarios) {
                     h.setDeporte(deporteDAO.obtenerDeportePorId(h.getDeporteId()));
                     h.setUsuario(usuarioDAO.obtenerUsuarioPorId(h.getEntrenadorId()));
+                    // Obtener la inscripción del usuario actual para este horario
+                    if (session.getAttribute("usuarioLogueado") != null) {
+                        Usuario usuarioActual = (Usuario) session.getAttribute("usuarioLogueado");
+                         inscripcion = inscripcionDAO.obtenerInscripcionPorUsuarioYHorario(usuarioActual.getId(), h.getId());
+                        h.setInscripcion(inscripcion);
+                    }
                 }
                 request.setAttribute("listaHorarios", listaHorarios);
                 url = "JSP/admin/verHorario.jsp";
@@ -234,7 +256,7 @@ public class FrontController extends HttpServlet {
             try {
                 listaHorarios = horarioDAO.obtenerHorariosPorEntrenador(usuario.getId());
                 request.setAttribute("listaHorarios", listaHorarios);
-                url = "JSP/entrenador/verHorarios.jsp";
+                url = "JSP/entrenador/misHorarios.jsp";
             } catch (SQLException ex) {
                 Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -279,7 +301,12 @@ public class FrontController extends HttpServlet {
             try {
                 listaEntrenadores = usuarioDAO.obtenerUsuariosPorRolEntrenador();
                 request.setAttribute("listaEntrenadores", listaEntrenadores);
-                url = "JSP/gerente/modificarEntrenadores.jsp";
+                if (listaEntrenadores.isEmpty()) {
+                    request.setAttribute("error", "No hay entrenadores para modificar");
+                    url = "index.jsp";
+                } else {
+                    url = "JSP/gerente/modificarEntrenadores.jsp";
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -291,8 +318,28 @@ public class FrontController extends HttpServlet {
             } catch (SQLException ex) {
                 Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }else if (request.getParameter("verPerfil") != null){
+            try {
+                usuario = usuarioDAO.obtenerUsuarioPorId(usuario.getId());
+                request.setAttribute("usuario", usuario);
+                url = "JSP/usuario/perfil.jsp";
+            } catch (SQLException ex) {
+                Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else if (request.getParameter("verAlumnos") != null){
+            int idhorario = Integer.parseInt(request.getParameter("idhorario"));
+            try {
+                listaInscripciones = inscripcionDAO.obtenerInscripcionesPorHorario(idhorario);
+                for (Inscripcion i : listaInscripciones) {
+                    i.setUsuario(usuarioDAO.obtenerUsuarioPorId(i.getUsuarioId()));
+                    listaUsuarios.add(i.getUsuario());
+                }
+                request.setAttribute("listaUsuarios", listaUsuarios);
+                url = "JSP/entrenador/verAlumnos.jsp";
+            } catch (SQLException ex) {
+                Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-
         request.getRequestDispatcher(url).forward(request, response);
 
     }

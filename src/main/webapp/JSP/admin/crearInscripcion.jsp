@@ -71,7 +71,7 @@ Author     : zapat
 
                 <div class="form-group">
                     <label for="plazasOfertadas">Número de plazas ofertadas:</label>
-                    <input type="number" id="plazasOfertadas" name="plazasOfertadas" value="1" required>
+                    <input type="number" id="plazasOfertadas" name="plazasOfertadas" value="20" required>
                 </div>
 
                 <div class="form-group">

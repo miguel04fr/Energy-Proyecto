@@ -64,11 +64,21 @@ public class Login extends HttpServlet {
 
             // Encriptar la contraseña ingresada
             String passwordEncriptada = Utils.md5(passwordIngresada);
-            boolean existe = uDAO.existeEmail(email);
+            boolean existe = false;
+            try {
+                existe = uDAO.existeEmail(email);
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             if (existe) {
 
-                Usuario usuario = uDAO.getUsuarioByEmail(email);
+                Usuario usuario = null;
+                try {
+                    usuario = uDAO.getUsuarioByEmail(email);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 
                 // Comparar las contraseñas encriptadas
                 if (usuario.getClave().equals(passwordEncriptada)) {

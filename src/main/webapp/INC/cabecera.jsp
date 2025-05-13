@@ -26,30 +26,36 @@
         </button>
         <div class="nav-links">
             <form action="FrontController" method="post">
-                <a href="${contexto}/index.jsp">Inicio</a>
                
                 <c:if test="${not empty sessionScope.usuarioLogueado}">
                     <c:if test="${sessionScope.usuarioLogueado.rol == 'USUARIO'}">
+                        <button type="submit" name="inicio" value="inicio">Inicio</button>
                         <button type="submit" name="listarDeportes" value="listarDeportes">Deportes</button>
                         <button type="submit" name="listarHorarios" value="listarHorarios">Horarios</button>
                         <button type="submit" name="listarEntrenadores" value="listarEntrenadores">Entrenadores</button>
                         <button type="submit" name="listarInscripciones" value="listarInscripciones">Inscripciones</button>
                     </c:if>
                     <c:if test="${sessionScope.usuarioLogueado.rol == 'ADMIN'}">
+                        <button type="submit" name="inicioAdmin" value="inicioAdmin">Inicio</button>
+
                         <button type="submit" name="modificarSalas" value="modificarSalas">Modificar Salas</button>
                         <button type="submit" name="eliminarGerente" value="eliminarGerente">Eliminar Gerente</button>
                         <button type="submit" name="modificarDeportes" value="modificarDeportes">Modificar Deportes</button>
                         <button type="submit" name="crearGerenteAdmin" value="crearGerenteAdmin">Crear Gerente</button>
                     </c:if>
                     <c:if test="${sessionScope.usuarioLogueado.rol == 'ENTRENADOR'}">
+                        <button type="submit" name="inicio" value="inicio">Inicio</button>
+
                         <button type="submit" name="misHorarios" value="misHorarios">Mis Horarios</button>
                         <button type="submit" name="misAlumnos" value="misAlumnos">Mis Alumnos</button>
                     </c:if>
                     <c:if test="${sessionScope.usuarioLogueado.rol == 'GERENTE'}">
+                        <button type="submit" name="inicio" value="inicio">Inicio</button>
+
                         <button type="submit" name="listarHorarios" value="listarHorarios">Horarios</button>
                         <button type="submit" name="listarEntrenadores" value="listarEntrenadores">Entrenadores</button>
                         <button type="submit" name="modificarEntrenadores" value="modificarEntrenadores">Modificar Entrenadores</button>
-                        <button type="submit" name="darAltaBaja" value="darAltaBaja">dar de alta/baja alumnos</button>
+                        <button type="submit" name="darAltaBaja" value="darAltaBaja">Gestion Clientes</button>
                     </c:if>
                 </c:if>
             
@@ -61,9 +67,24 @@
                     <div class="user-menu">
                         <span class="user-name">${sessionScope.usuarioLogueado.nombre}</span>
                         <form action="FrontController" method="post">
+                            <c:if test="${sessionScope.usuarioLogueado.rol == 'ENTRENADOR'}">
+
+   <button type="submit" name="verPerfil" value="verPerfil" class="cerrar-sesion">
+                                <i class="fas fa-user-circle"></i>
+                                Mi Perfil
+                            </button>                            </c:if>
+                            <c:if test="${sessionScope.usuarioLogueado.rol == 'USUARIO'}">
+
+                            <button type="submit" name="verPerfil" value="verPerfil" class="cerrar-sesion">
+                                <i class="fas fa-user-circle"></i>
+                                Mi Perfil
+                            </button>
+                        </c:if>
+
                             <button type="submit" name="cerrarSesion" value="cerrarSesion" class="cerrar-sesion">
                                 <i class="fas fa-sign-out-alt"></i>
-                                Cerrar Sesión</button>
+                                Cerrar Sesión
+                            </button>
                         </form>
                     </div>
                 </c:when>
@@ -103,21 +124,9 @@
                         <button type="button" class="toggle-password"><i class="fas fa-eye"></i></button>
                     </div>
                 </div>
-                <div class="form-group remember-forgot">
-                    <div class="remember-me">
-                        <input type="checkbox" id="rememberMe">
-                        <label for="rememberMe">Recordarme</label>
-                    </div>
-                    <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
-                </div>
+                
                 <button type="submit" class="submit-auth-btn" name="login">Acceder</button>
-                <div class="social-login">
-                    <p>O accede con</p>
-                    <div class="social-buttons">
-                        <button type="button" class="social-btn google"><i class="fab fa-google"></i> Google</button>
-                        <button type="button" class="social-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</button>
-                    </div>
-                </div>
+            
             </form>
         </div>
         <div class="modal-footer">
@@ -144,43 +153,43 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="registerDni"><i class="fas fa-id-card"></i> DNI</label>
-                        <input type="text" id="registerDni" name="dni" value="09224236V">
+                        <input type="text" id="registerDni" name="dni" value="${requestScope.usuario.dni}">
                     </div>
                     <div class="form-group">
                         <label for="registerName"><i class="fas fa-user"></i> Nombre</label>
-                        <input type="text" id="registerName" name="nombre" value="Miguel">
+                        <input type="text" id="registerName" name="nombre" value="${requestScope.usuario.nombre}">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="registerLastName"><i class="fas fa-user"></i> Apellidos</label>
-                        <input type="text" id="registerLastName" name="apellido" value="Folguera">
+                        <input type="text" id="registerLastName" name="apellido" value="${requestScope.usuario.apellido}">
                     </div>
                     <div class="form-group">
                         <label for="registerBirthDate"><i class="fas fa-calendar"></i> Fecha de Nacimiento</label>
-                        <input type="date" id="registerBirthDate" name="fechaNacimiento" value="2000-01-01">
+                        <input type="date" id="registerBirthDate" name="fechaNacimiento" value="${requestScope.usuario.fechaNacimiento}">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="registerEmail"><i class="fas fa-envelope"></i> Email</label>
-                    <input type="email" id="registerEmail" name="email" value="zapatospou@gmail.com">
+                    <input type="email" id="registerEmail" name="email" value="${requestScope.usuario.email}">
                 </div>
 
                 <div class="form-group">
                     <label for="registerPhone"><i class="fas fa-phone"></i> Teléfono</label>
-                    <input type="tel" id="registerPhone" name="telefono" value="693769595">
+                    <input type="tel" id="registerPhone" name="telefono" value="${requestScope.usuario.telefono}">
                 </div>
                 <div class="form-group">
                     <label for="registerIban"><i class="fas fa-credit-card"></i> IBAN</label>
-                    <input type="tel" id="registerIban" name="iban" value="ES9121000418450200051332">
+                    <input type="tel" id="registerIban" name="iban" value="${requestScope.usuario.iban}">
                 </div>
 
                 <div class="form-group">
                     <label for="registerPassword"><i class="fas fa-lock"></i> Contraseña</label>
                     <div class="password-input">
-                        <input type="password" id="registerPassword" name="clave" value="a">
+                        <input type="password" id="registerPassword" name="clave" value="">
                         <button type="button" class="toggle-password"><i class="fas fa-eye"></i></button>
                     </div>
                 </div>
@@ -188,7 +197,7 @@
                 <div class="form-group">
                     <label for="registerPasswordConfirm"><i class="fas fa-lock"></i> Confirmar Contraseña</label>
                     <div class="password-input">
-                        <input type="password" id="registerPasswordConfirm" value="a">
+                        <input type="password" id="registerPasswordConfirm" value="">
                         <button type="button" class="toggle-password"><i class="fas fa-eye"></i></button>
                     </div>
                 </div>

@@ -17,4 +17,5 @@ public interface IInscripcionDAO {
     List<Inscripcion> obtenerTodasLasInscripciones() throws SQLException;
     List<Inscripcion> obtenerInscripcionesPorUsuario(int usuarioId) throws SQLException;
     List<Inscripcion> obtenerInscripcionesPorHorario(int horarioId) throws SQLException;
+    Inscripcion obtenerInscripcionPorUsuarioYHorario(int usuarioId, int horarioId) throws SQLException;
 } 

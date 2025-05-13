@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
@@ -28,6 +29,7 @@ import es.energy.beans.Deporte;
 import es.energy.beans.Horario;
 import es.energy.beans.Sala;
 import es.energy.beans.Usuario;
+import es.energy.models.Utils;
 /**
  *
  * @author zapat
@@ -50,6 +52,7 @@ public class Update extends HttpServlet {
             String url = "index.jsp";
         DAOFactory daof = DAOFactory.getDAOFactory();
         IHorarioDAO horarioDAO = daof.getHorarioDAO();
+        HttpSession session = request.getSession();
         IDeporteDAO deporteDAO = daof.getDeporteDAO();
         IUsuarioDAO usuarioDAO = daof.getUsurioDAO();
         Deporte deporte = new Deporte();
@@ -62,7 +65,7 @@ public class Update extends HttpServlet {
         List<Horario> listaHorarios = new ArrayList<>();
         List<Usuario> listaEntrenadores = new ArrayList<>();
         Usuario entrenador = new Usuario();
-
+        Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("usuarioLogueado");
         if (request.getParameter("actualizarSala") != null) {
                 try {
                     BeanUtils.populate(sala, request.getParameterMap());
@@ -133,7 +136,11 @@ public class Update extends HttpServlet {
             
          }else if (request.getParameter("editarEntrenador") != null) {
             int id = Integer.parseInt(request.getParameter("id"));
-             entrenador = usuarioDAO.obtenerUsuarioPorId(id);
+                try {
+                    entrenador = usuarioDAO.obtenerUsuarioPorId(id);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+                }
             request.setAttribute("entrenador", entrenador);
             url = "JSP/gerente/editarEntrenador.jsp";
          }else if (request.getParameter("guardarEntrenador") != null) {
@@ -149,6 +156,28 @@ public class Update extends HttpServlet {
                 listaEntrenadores = usuarioDAO.obtenerUsuariosPorRolEntrenador();
                 request.setAttribute("listaEntrenadores", listaEntrenadores);
                 url = "JSP/gerente/modificarEntrenadores.jsp";
+            } catch (IllegalAccessException | InvocationTargetException ex) {
+                Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+            }   catch (SQLException ex) {
+                    Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+                }
+         }else if (request.getParameter("actualizarPerfil") != null) {
+            try {
+                usuario = usuarioDAO.obtenerUsuarioPorId(usuarioLogueado.getId());
+                DateConverter converter = new DateConverter();
+                converter.setPattern("yyyy-MM-dd");
+                ConvertUtils.register(converter, Date.class);
+                BeanUtils.populate(usuario, request.getParameterMap());
+                if(usuario.getClave().equals("")){
+                    usuario.setClave(usuarioLogueado.getClave());
+                }else{
+                    usuario.setClave(Utils.md5(usuario.getClave()));
+                }
+                usuarioDAO.actualizar(usuario);
+                usuario=usuarioDAO.obtenerUsuarioPorId(usuarioLogueado.getId());
+                session.setAttribute("usuarioLogueado", usuario);
+                request.setAttribute("mensaje", "Perfil actualizado correctamente");
+                url = "JSP/usuario/perfil.jsp";
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
             }   catch (SQLException ex) {

@@ -19,19 +19,19 @@ public interface IUsuarioDAO {
     public void insertar(Usuario usuario) throws SQLException;
 
     // Método para obtener todos los usuarios
-    public List<Usuario> obtenerTodos();
+    public List<Usuario> obtenerTodos() throws SQLException;
 
     // Método para actualizar un usuario
-    public void actualizar(Usuario usuario);
+    public void actualizar(Usuario usuario) throws SQLException;
 
     // Método para eliminar un usuario por su ID
-    public void eliminar(int id);
+    public void eliminar(int id) throws SQLException;
 
-    public Usuario getUsuarioByEmail(String email);
+    public Usuario getUsuarioByEmail(String email) throws SQLException;
 
-    public boolean existeEmail(String email);
+    public boolean existeEmail(String email) throws SQLException;
 
-    public Usuario obtenerUsuarioPorId(int id);
+    public Usuario obtenerUsuarioPorId(int id) throws SQLException;
 
     public List<Usuario> obtenerUsuariosPorEntrenador(int entrenadorId) throws SQLException;
 

@@ -218,11 +218,16 @@
                             </div>
                             <div class="info-group">
                                 <span class="info-label">Entrenador</span>
-                                <span class="info-value">${inscripcion.horario.entrenador.nombre} ${inscripcion.horario.entrenador.apellido}</span>
+                                <span class="info-value">${inscripcion.usuario.nombre} ${inscripcion.usuario.apellido}</span>
+                            </div>
+                            <div class="info-group">
+                                <span class="info-label">Deporte</span>
+                                <span class="info-value">${inscripcion.deporte.nombreDeporte}</span>
                             </div>
                         </div>
                         <div class="acciones">
-                            <form action="FrontController" method="post">
+                            <form action="Delete" method="post">
+                                <input type="hidden" name="horarioId" value="${inscripcion.horario.id}">
                                 <input type="hidden" name="inscripcionId" value="${inscripcion.id}">
                                 <button type="submit" name="cancelarInscripcion" class="btn-cancelar">
                                     Cancelar Inscripción

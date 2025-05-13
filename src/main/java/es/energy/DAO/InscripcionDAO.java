@@ -123,6 +123,29 @@ public class InscripcionDAO implements IInscripcionDAO {
         return inscripciones;
     }
 
+    @Override
+    public Inscripcion obtenerInscripcionPorUsuarioYHorario(int usuarioId, int horarioId) throws SQLException {
+        String sql = "SELECT * FROM inscripciones WHERE UsuarioId = ? AND HorarioId = ?";
+        try (Connection con = ConnectionFactory.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            
+            stmt.setInt(1, usuarioId);
+            stmt.setInt(2, horarioId);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Inscripcion inscripcion = new Inscripcion();
+                    inscripcion.setId(rs.getInt("Id"));
+                    inscripcion.setUsuarioId(rs.getInt("UsuarioId"));
+                    inscripcion.setHorarioId(rs.getInt("HorarioId"));
+                    inscripcion.setFechaInscripcion(rs.getDate("FechaInscripcion"));
+                    return inscripcion;
+                }
+            }
+        }
+        return null;
+    }
+
     private Inscripcion mapResultSetToInscripcion(ResultSet rs) throws SQLException {
         return new Inscripcion(
             rs.getInt("Id"),

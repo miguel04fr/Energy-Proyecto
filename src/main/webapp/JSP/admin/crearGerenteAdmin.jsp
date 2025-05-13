@@ -36,14 +36,14 @@
                             <label for="dni"><i class="fas fa-id-card"></i> DNI</label>
                             <input type="text" id="dni" name="dni" required 
                                    pattern="[0-9]{8}[A-Z]" 
-                                   value="12345678A"
+                                   value="${requestScope.usuario.dni}"
                                    title="8 números seguidos de una letra mayúscula">
                         </div>
                         <div class="form-group">
                             <label for="nombre"><i class="fas fa-user"></i> Nombre</label>
                             <input type="text" id="nombre" name="nombre" required
                                    pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]{2,50}"
-                                   value="Juan"
+                                   value="${requestScope.usuario.nombre}"
                                    title="Solo letras y espacios, entre 2 y 50 caracteres">
                         </div>
                     </div>
@@ -53,14 +53,14 @@
                             <label for="apellido"><i class="fas fa-user"></i> Apellidos</label>
                             <input type="text" id="apellido" name="apellido" required
                                    pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]{2,100}"
-                                   value="García López"
+                                   value="${requestScope.usuario.apellido}"
                                    title="Solo letras y espacios, entre 2 y 100 caracteres">
                         </div>
                         <div class="form-group">
                             <label for="fechaNacimiento"><i class="fas fa-calendar"></i> Fecha de Nacimiento</label>
                             <input type="date" id="fechaNacimiento" name="fechaNacimiento" required
                                    min="1950-01-01" max="2005-12-31"
-                                   value="1990-01-01">
+                                   value="${requestScope.usuario.fechaNacimiento}">
                         </div>
                     </div>
 
@@ -68,7 +68,7 @@
                         <label for="email"><i class="fas fa-envelope"></i> Email</label>
                         <input type="email" id="email" name="email" required
                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                               value="@gmail.com"
+                               value="${requestScope.usuario.email}"
                                title="Introduce un email válido">
                     </div>
 
@@ -76,7 +76,7 @@
                         <label for="telefono"><i class="fas fa-phone"></i> Teléfono</label>
                         <input type="tel" id="telefono" name="telefono" required 
                                pattern="[6-9][0-9]{8}" 
-                                value="612345678"
+                               value="${requestScope.usuario.telefono}"
                                title="9 dígitos comenzando por 6, 7, 8 o 9">
                     </div>
 
@@ -84,7 +84,7 @@
                         <label for="iban"><i class="fas fa-credit-card"></i> IBAN</label>
                         <input type="text" id="iban" name="iban" required 
                                pattern="[A-Z]{2}[0-9]{22}" 
-                               value="ES9121000418450200051332"
+                               value="${requestScope.usuario.iban}"
                                title="2 letras seguidas de 22 números">
                     </div>
 
