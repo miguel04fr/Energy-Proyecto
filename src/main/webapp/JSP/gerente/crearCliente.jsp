@@ -116,7 +116,7 @@
                     </div>
 
                     <div class="form-actions">
-                        <button type="submit" name="crearGerenteAdmin" class="btn-submit" id="submitButton">
+                        <button type="submit" name="crearCliente" class="btn-submit" id="submitButton">
                             <i class="fas fa-user-plus"></i> Crear Usuario
                         </button>
                     </div>

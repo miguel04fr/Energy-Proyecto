@@ -76,7 +76,7 @@
                         <div class="card-content">
                             <h3>${deporte.nombreDeporte}</h3>
                             <p>${deporte.descripcion}</p>
-                            <button type="button" class="sport-btn" data-sport="${deporte.nombreDeporte}">
+                            <button type="submit" class="sport-btn" data-sport="${deporte.nombreDeporte}" name="selectedSport" value="${deporte.nombreDeporte}">
                                 <span>Inscribirse</span>
                                 <i class="fas fa-arrow-right"></i>
                             </button>
@@ -86,18 +86,9 @@
                   
                 </div>
 
-                <input type="hidden" id="selectedSport" name="selectedSport" value="">
+                
 
-                <div class="form-actions">
-                    <button type="submit" class="submit-btn" name="consultarInscripcion">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Consultar Inscripción</span>
-                    </button>
-                    <button type="reset" class="reset-btn">
-                        <i class="fas fa-times-circle"></i>
-                        <span>Cancelar</span>
-                    </button>
-                </div>
+                
             </section>
         </form> 
     </main>

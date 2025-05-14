@@ -78,7 +78,7 @@ public class Create extends HttpServlet {
         Usuario usuario = new Usuario();
         Inscripcion inscripcion = new Inscripcion();
         ReservasPista reservaPista = new ReservasPista();
-
+        List<Inscripcion> listaInscripciones = new ArrayList<>();
         List<Usuario> listaEntrenadores = new ArrayList<>();
         List<Horario> listaHorarios = new ArrayList<>();
         List<Sala> listaSalas = new ArrayList<>();
@@ -88,7 +88,7 @@ public class Create extends HttpServlet {
         HttpSession session = request.getSession();
         try {
             // Si el parámetro "registro" está presente, se procesa el registro del usuario
-            if (request.getParameter("registrase") != null) {
+            if (request.getParameter("registrase") != null || request.getParameter("crearCliente") != null) {
                 DateConverter converter = new DateConverter();
                 converter.setPattern("yyyy-MM-dd");
                 ConvertUtils.register(converter, Date.class);
@@ -97,6 +97,7 @@ public class Create extends HttpServlet {
                 BeanUtils.populate(usuario, request.getParameterMap());
                 request.setAttribute("usuario", usuario);
                 try {
+                    request.setAttribute("error", "Usuario creado correctamente");
                     // Encriptar la contraseña
                     usuario.setClave(Utils.md5(usuario.getClave()));
                     usuarioDAO.insertar(usuario);
@@ -176,7 +177,21 @@ public class Create extends HttpServlet {
                                  "Sala: " + horarioInscripcion.getSalaId() + "\n\n" +
                                  "¡Gracias por elegir Energy!";
                 
-                EmailUtil.enviarCorreo(usuarioInscrito.getEmail(), asunto, contenido);
+               EmailUtil.enviarCorreo(usuarioInscrito.getEmail(), asunto, contenido);
+                try {
+
+                    listaInscripciones = inscripcionDAO.obtenerInscripcionesPorUsuario(usuarioInscrito.getId());
+                    for (Inscripcion i : listaInscripciones) {
+                        i.setHorario(horarioDAO.obtenerHorarioPorId(i.getHorarioId()));
+                        i.setDeporte(deporteDAO.obtenerDeportePorId(i.getHorario().getDeporteId()));
+                        i.setUsuario(usuarioDAO.obtenerUsuarioPorId(i.getHorario().getEntrenadorId()));
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(Create.class.getName()).log(Level.SEVERE, null, ex);
+                }   
+                request.setAttribute("listaInscripciones", listaInscripciones);
+
+                url="JSP/usuario/listarInscripciones.jsp";
             } else if (request.getParameter("crearGerenteAdmin") != null) {
                 DateConverter converter = new DateConverter();
                 converter.setPattern("yyyy-MM-dd");
@@ -215,11 +230,25 @@ public class Create extends HttpServlet {
                 url = "JSP/admin/modificarSalas.jsp";
 
             } else if (request.getParameter("crearDeporte") != null) {
-                BeanUtils.populate(deporte, request.getParameterMap());
-                deporteDAO.agregarDeporte(deporte);
-                listaDeportes = deporteDAO.obtenerTodosLosDeportes();
-                request.setAttribute("listaDeportes", listaDeportes);
-                url = "JSP/admin/modificarDeportes.jsp";
+               String nombreDeporte = request.getParameter("nombreDeporte");
+               listaDeportes = deporteDAO.obtenerTodosLosDeportes();
+                boolean existe = false;
+                for(Deporte d : listaDeportes){
+                    if(d.getNombreDeporte().equals(nombreDeporte)){
+                        existe = true;
+                    }
+                }
+                if(nombreDeporte.equals("") || existe){
+                    request.setAttribute("mesajeErrorDeporte", "El nombre del deporte no puede estar vacío o ya existe");
+                    request.setAttribute("listaDeportes", listaDeportes);
+                    url = "JSP/admin/modificarDeportes.jsp";
+                }else{
+                    BeanUtils.populate(deporte, request.getParameterMap());
+                    deporteDAO.agregarDeporte(deporte);
+                    listaDeportes = deporteDAO.obtenerTodosLosDeportes();
+                    request.setAttribute("listaDeportes", listaDeportes);
+                    url = "JSP/admin/modificarDeportes.jsp";
+                }
             } else {
                 url = "errorPage.jsp";
             }

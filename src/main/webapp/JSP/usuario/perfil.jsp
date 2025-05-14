@@ -85,9 +85,7 @@
                         <button type="submit" name="actualizarPerfil" class="btn-primary">
                             <i class="fas fa-save"></i> Guardar Cambios
                         </button>
-                        <button type="button" class="btn-secondary" name="inicio">
-                            <i class="fas fa-times"></i> Cancelar
-                        </button>
+                    
                     </div>
                 </form>
             </div>

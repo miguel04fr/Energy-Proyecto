@@ -15,13 +15,7 @@
 <body>
   <jsp:include page="/INC/cabecera.jsp"/>
 
-    <div class="hero-banner">
-        <div class="hero-content">
-            <h1>Descubre Tu Pasión Deportiva</h1>
-            <p>Únete a nuestra comunidad y disfruta de los mejores deportes</p>
-            <a href="#sports-section" class="hero-btn">Explorar Deportes</a>
-        </div>
-    </div>
+ 
 
     <main>
         <form id="sportsForm" action="FrontController" method="post">
@@ -76,28 +70,14 @@
                         <div class="card-content">
                             <h3>${deporte.nombreDeporte}</h3>
                             <p>${deporte.descripcion}</p>
-                            <button type="button" class="sport-btn" data-sport="${deporte.nombreDeporte}">
-                                <span>Editar</span>
-                                <i class="fas fa-arrow-right"></i>
-                            </button>
+                          
                         </div>
                     </div>
                     </c:forEach>
                   
                 </div>
 
-                <input type="hidden" id="selectedSport" name="selectedSport" value="">
-
-                <div class="form-actions">
-                    <button type="submit" class="submit-btn" name="editarDeporte">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Editar Deporte</span>
-                    </button>
-                    <button type="reset" class="reset-btn">
-                        <i class="fas fa-times-circle"></i>
-                        <span>Cancelar</span>
-                    </button>
-                </div>
+             
             </section>
         </form> 
     </main>
@@ -106,7 +86,7 @@
         <div class="cta-content">
             <h2>¿Listo para comenzar?</h2>
             <p>Únete a nuestra comunidad deportiva y transforma tu vida</p>
-            <a href="#sports-section" class="cta-btn">Inscríbete Ahora</a>
+           
         </div>
     </section>
 

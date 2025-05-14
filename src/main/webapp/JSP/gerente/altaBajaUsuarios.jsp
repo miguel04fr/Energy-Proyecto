@@ -133,6 +133,16 @@
                         </form>
                     </div>
                 </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <form action="FrontController" method="post">
+                            <button type="submit" name="crearCliente" value="crearCliente" class="btn btn-primary">
+                                <i class="fas fa-user-plus"></i> Crear Cliente
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
 
                 <!-- Vista de tabla para pantallas grandes -->
                 <div class="table-responsive">
@@ -194,6 +204,8 @@
                                                 <i class="fas fa-trash-alt"></i> Eliminar
                                             </button>
                                         </form>
+
+                                    
                                     </td>
                                 </tr>
                             </c:forEach>

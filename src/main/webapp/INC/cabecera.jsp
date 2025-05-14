@@ -56,6 +56,7 @@
                         <button type="submit" name="listarEntrenadores" value="listarEntrenadores">Entrenadores</button>
                         <button type="submit" name="modificarEntrenadores" value="modificarEntrenadores">Modificar Entrenadores</button>
                         <button type="submit" name="darAltaBaja" value="darAltaBaja">Gestion Clientes</button>
+                        <button type="submit" name="crearCliente" value="crearCliente">Crear Cliente</button>
                     </c:if>
                 </c:if>
             
@@ -203,7 +204,7 @@
                 </div>
 
                 <div class="form-group terms">
-                    <input type="checkbox" id="termsCheck" checked required>
+                    <input type="checkbox" id="termsCheck"  required>
                     <label for="termsCheck">Acepto los <a href="#">Términos y Condiciones</a> y la <a href="#">Política de Privacidad</a></label>
                 </div>
 

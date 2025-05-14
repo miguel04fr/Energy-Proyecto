@@ -129,12 +129,10 @@ public class FrontController extends HttpServlet {
             } catch (SQLException ex) {
                 Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } else if (request.getParameter("consultarInscripcion") != null) {
+        } else if (request.getParameter("selectedSport") != null) {
 
             String nombreDeporte = request.getParameter("selectedSport");
-            if (nombreDeporte.equals("Fútbol")) {
-                url="JSP/usuario/reservarPista.jsp";
-            } else {
+            
                 try {
                     deporte = deporteDAO.obtenerDeportePorNombre(request.getParameter("selectedSport"));
                     listaHorarios = horarioDAO.obtenerHorariosPorDeporte(deporte.getId());
@@ -148,7 +146,7 @@ public class FrontController extends HttpServlet {
                 } catch (SQLException ex) {
                     Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
+            
         } else if (request.getParameter("listarDeportes") != null) {
             try {
                 listaDeportes = deporteDAO.obtenerTodosLosDeportes();
@@ -339,6 +337,8 @@ public class FrontController extends HttpServlet {
             } catch (SQLException ex) {
                 Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }else if (request.getParameter("crearCliente") != null){
+            url = "JSP/gerente/crearCliente.jsp";
         }
         request.getRequestDispatcher(url).forward(request, response);
 

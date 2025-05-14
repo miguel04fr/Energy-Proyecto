@@ -1,64 +1,71 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+    // Configurar las cookies de seguridad
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+        for (Cookie cookie : cookies) {
+            cookie.setSecure(true);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+        }
+    }
+%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com;">
         <title>Ver Horarios</title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/INC/estilos.css" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <style>
-            .table-container {
-                overflow-x: auto;
-                margin: 20px 0;
+            .accordion-button:not(.collapsed) {
+                background-color: #e7f1ff;
+                color: #0c63e4;
             }
 
-            .card-container {
-                display: none;
+            .accordion-button:focus {
+                box-shadow: none;
+                border-color: rgba(0,0,0,.125);
             }
 
-            .horario-card {
-                margin-bottom: 15px;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                padding: 15px;
-                background-color: #fff;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            }
-
-            .horario-card .card-header {
-                background-color: #f8f9fa;
+            .horario-item {
+                border-left: 4px solid #0d6efd;
+                margin-bottom: 10px;
                 padding: 10px;
-                border-bottom: 1px solid #ddd;
-                border-radius: 8px 8px 0 0;
+                background-color: #f8f9fa;
+                border-radius: 4px;
             }
 
-            .horario-card .card-body {
-                padding: 15px;
+            .horario-item:hover {
+                background-color: #e9ecef;
             }
 
             .horario-info {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
                 margin-bottom: 10px;
             }
 
-            .horario-info strong {
+            .horario-info span {
                 display: inline-block;
-                width: 120px;
-                color: #666;
+                min-width: 150px;
+            }
+
+            .horario-info strong {
+                color: #495057;
             }
 
             .btn-container {
-                margin-top: 10px;
                 display: flex;
                 gap: 5px;
                 flex-wrap: wrap;
-            }
-
-            .btn {
-                margin: 2px;
-                white-space: nowrap;
             }
 
             .error-message {
@@ -79,52 +86,42 @@
                 background-color: #d1ecf1;
             }
 
-            @media (max-width: 768px) {
-                .table-container {
-                    display: none;
-                }
-
-                .card-container {
-                    display: block;
-                }
-
+            @media screen and (max-width: 480px) {
                 .container {
-                    padding: 10px;
+                    margin-top: 114px !important;
                 }
-                @media screen and (max-width: 480px) {
-    .container {
-        margin-top: 114px !important;
-    }
-}
+            }
 
-                h1 {
-                    font-size: 1.5rem;
-                }
+            .loading-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.8);
+                display: none;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+            }
 
-                .horario-card {
-                    margin: 10px 0;
-                }
+            .loading-spinner {
+                width: 50px;
+                height: 50px;
+                border: 5px solid #f3f3f3;
+                border-top: 5px solid #3498db;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+            }
 
-                .horario-info strong {
-                    width: 100px;
-                    font-size: 0.9rem;
-                }
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
 
-                .btn {
-                    padding: 0.25rem 0.5rem;
-                    font-size: 0.75rem;
-                    width: 100%;
-                    margin: 5px 0;
-                }
-
-                .admin-actions {
-                    margin: 10px 0;
-                }
-
-                .btn-admin {
-                    width: 100%;
-                    margin: 5px 0;
-                }
+            .btn:disabled {
+                cursor: not-allowed;
+                opacity: 0.7;
             }
         </style>
     </head>
@@ -135,10 +132,11 @@
             <h1 class="text-center my-4">Lista de Horarios</h1>
             
             <c:if test="${sessionScope.usuarioLogueado.rol == 'GERENTE'}">
-                <div class="admin-actions">
+                <div class="admin-actions mb-4">
                     <form action="FrontController" method="post">
-                        <button type="submit" name="crearInscripcion" class="btn btn-primary btn-admin">
-                            <i class="fas fa-plus"></i> Crear Nueva Inscripción
+                        <input type="hidden" name="crearInscripcion" value="true">
+                        <button type="submit" name="crearInscripcion" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Crear Nueva Clase
                         </button>
                     </form>
                 </div>
@@ -152,151 +150,162 @@
                 <p class="info-message">No hay horarios disponibles</p>
             </c:if>
 
-            <!-- Vista de tabla para pantallas grandes -->
             <c:if test="${not empty listaHorarios}">
-                <div class="table-container">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Deporte</th>
-                                <th>Entrenador</th>
-                                <th>Día</th>
-                                <th>Hora</th>
-                                <th>Plazas Ofertadas</th>
-                                <th>Plazas Ocupadas</th>
-                                <c:if test="${sessionScope.usuarioLogueado.rol == 'USUARIO'}">
-                                    <th>Inscribirse</th>
-                                </c:if>
-                                <c:if test="${sessionScope.usuarioLogueado.rol == 'GERENTE'}">
-                                    <th>Eliminar Clase</th>
-                                </c:if>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach var="horario" items="${requestScope.listaHorarios}">
-                                <tr>
-                                    <td>${horario.id}</td>
-                                    <td>${horario.deporte.nombreDeporte}</td>
-                                    <td>${horario.usuario.nombre} ${horario.usuario.apellido}</td>
-                                    <td>${horario.diaSemana}</td>
-                                    <td>${horario.hora}</td>
-                                    <td>${horario.plazasOfertadas}</td>
-                                    <td>${horario.plazasOcupadas}</td>
-                                    <c:if test="${sessionScope.usuarioLogueado.rol == 'USUARIO'}">
-                                        <td>
-                                            <form action="${pageContext.request.contextPath}/Create" method="post">
-                                                <input type="hidden" name="horarioId" value="${horario.id}">
-                                                <input type="hidden" name="inscripcionId" value="${horario.inscripcion.id}">
-                                                <c:if test="${horario.plazasOcupadas < horario.plazasOfertadas}">
-                                                    <c:choose>
-                                                        <c:when test="${empty horario.inscripcion}">
-                                                            <button type="submit" name="confirmarInscripcion" class="btn btn-success btn-sm">
-                                                                <i class="fas fa-user-plus"></i> Inscribirse
+                <div class="accordion" id="horariosAccordion">
+                    <c:set var="diasSemana" value="Lunes,Martes,Miércoles,Jueves,Viernes,Sábado,Domingo" />
+                    <c:forTokens items="${diasSemana}" delims="," var="dia">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                        data-bs-target="#collapse${dia}" aria-expanded="false" aria-controls="collapse${dia}">
+                                    ${dia}
+                                </button>
+                            </h2>
+                            <div id="collapse${dia}" class="accordion-collapse collapse" data-bs-parent="#horariosAccordion">
+                                <div class="accordion-body">
+                                    <c:forEach var="horario" items="${requestScope.listaHorarios}">
+                                        <c:if test="${horario.diaSemana == dia}">
+                                            <div class="horario-item">
+                                                <div class="horario-info">
+                                                    <span><strong>Deporte:</strong> ${horario.deporte.nombreDeporte}</span>
+                                                    <span><strong>Entrenador:</strong> ${horario.usuario.nombre} ${horario.usuario.apellido}</span>
+                                                    <span><strong>Hora:</strong> ${horario.hora}</span>
+                                                    <span><strong>Plazas:</strong> ${horario.plazasOcupadas}/${horario.plazasOfertadas}</span>
+                                                    <span><strong>Sala:</strong> ${horario.salaId}</span>
+                                                </div>
+                                                <div class="btn-container">
+                                                    <c:if test="${sessionScope.usuarioLogueado.rol == 'USUARIO'}">
+                                                    <c:if test="${sessionScope.usuarioLogueado.activo == true}">
+                                                        <c:if test="${horario.plazasOcupadas < horario.plazasOfertadas}">
+                                                            <c:choose>
+                                                                <c:when test="${empty horario.inscripcion}">
+                                                                    <form action="${pageContext.request.contextPath}/Create" method="post">
+                                                                        <input type="hidden" name="horarioId" value="${horario.id}">
+                                                                        <input type="hidden" name="inscripcionId" value="${horario.inscripcion.id}">
+                                                                        <input type="hidden" name="confirmarInscripcion" value="true">
+                                                                        <button type="submit" class="btn btn-success btn-sm" name="confirmarInscripcion" value="inscripcion">
+                                                                            <i class="fas fa-user-plus"></i> Inscribirse
+                                                                        </button>
+                                                                    </form>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <button type="button" class="btn btn-secondary btn-sm" disabled>
+                                                                        <i class="fas fa-check"></i> Ya está inscrito
+                                                                    </button>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </c:if>
+                                                        <c:if test="${horario.plazasOcupadas >= horario.plazasOfertadas}">
+                                                            <button type="button" class="btn btn-danger btn-sm" disabled>
+                                                                <i class="fas fa-times"></i> Todas las plazas ocupadas
                                                             </button>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <button type="button" class="btn btn-secondary btn-sm" disabled>
-                                                                <i class="fas fa-check"></i> Ya está inscrito
-                                                            </button>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </c:if>
-                                                <c:if test="${horario.plazasOcupadas >= horario.plazasOfertadas}">
-                                                    <button type="button" class="btn btn-danger btn-sm" disabled>
-                                                        <i class="fas fa-times"></i> Todas las plazas ocupadas
-                                                    </button>
-                                                </c:if>
-                                            </form>
-                                        </td>
-                                    </c:if>
-                                    <c:if test="${sessionScope.usuarioLogueado.rol == 'GERENTE'}">
-                                        <td>
-                                            <form action="${pageContext.request.contextPath}/Delete" method="post">
-                                                <input type="hidden" name="horarioId" value="${horario.id}">
-                                                <button type="submit" name="eliminarHorario" class="btn btn-danger btn-sm">
-                                                    <i class="fas fa-trash-alt"></i> Eliminar Clase
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </c:if>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
-                </div>
+                                                        </c:if>
+                                                        
+                                                            </c:if>
 
-                <!-- Vista de tarjetas para móviles -->
-                <div class="card-container">
-                    <c:forEach var="horario" items="${requestScope.listaHorarios}">
-                        <div class="horario-card">
-                            <div class="card-header">
-                                <h5 class="mb-0">${horario.deporte.nombreDeporte}</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="horario-info">
-                                    <strong>ID:</strong> ${horario.id}
-                                </div>
-                                <div class="horario-info">
-                                    <strong>Entrenador:</strong> ${horario.usuario.nombre} ${horario.usuario.apellido}
-                                </div>
-                                <div class="horario-info">
-                                    <strong>Día:</strong> ${horario.diaSemana}
-                                </div>
-                                <div class="horario-info">
-                                    <strong>Hora:</strong> ${horario.hora}
-                                </div>
-                                <div class="horario-info">
-                                    <strong>Plazas:</strong> ${horario.plazasOcupadas}/${horario.plazasOfertadas}
-                                </div>
-                                <div class="btn-container">
-                                    <c:if test="${sessionScope.usuarioLogueado.rol == 'USUARIO'}">
-                                        <form action="${pageContext.request.contextPath}/Create" method="post" class="w-100">
-                                            <input type="hidden" name="horarioId" value="${horario.id}">
-                                            <input type="hidden" name="inscripcionId" value="${horario.inscripcion.id}">
-                                            <c:if test="${horario.plazasOcupadas < horario.plazasOfertadas}">
-                                                <c:choose>
-                                                    <c:when test="${empty horario.inscripcion}">
-                                                        <button type="submit" name="confirmarInscripcion" class="btn btn-success">
-                                                            <i class="fas fa-user-plus"></i> Inscribirse
-                                                        </button>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <button type="button" class="btn btn-secondary" disabled>
-                                                            <i class="fas fa-check"></i> Ya está inscrito
-                                                        </button>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </c:if>
-                                            <c:if test="${horario.plazasOcupadas >= horario.plazasOfertadas}">
-                                                <button type="button" class="btn btn-danger" disabled>
-                                                    <i class="fas fa-times"></i> Todas las plazas ocupadas
-                                                </button>
-                                            </c:if>
-                                        </form>
-                                    </c:if>
-                                    <c:if test="${sessionScope.usuarioLogueado.rol == 'GERENTE'}">
-                                        <form action="${pageContext.request.contextPath}/Delete" method="post" class="w-100">
-                                            <input type="hidden" name="horarioId" value="${horario.id}">
-                                            <button type="submit" name="eliminarHorario" class="btn btn-danger">
-                                                <i class="fas fa-trash-alt"></i> Eliminar Clase
-                                            </button>
-                                        </form>
-                                    </c:if>
+                                                            <c:if test="${sessionScope.usuarioLogueado.activo == false}">
+                                                                <button type="button" class="btn btn-secondary btn-sm" disabled>
+                                                                    <i class="fas fa-times"></i> Usuario inactivo pendiente de aprobación por pago
+                                                                </button>
+                                                            
+                                                        </c:if>
+
+                                                    </c:if>
+                                                    <c:if test="${sessionScope.usuarioLogueado.rol == 'GERENTE'}">
+                                                        <form action="${pageContext.request.contextPath}/Delete" method="post">
+                                                            <input type="hidden" name="horarioId" value="${horario.id}">
+                                                            <input type="hidden" name="eliminarHorario" value="true">
+                                                            <button type="submit" name="eliminarHorario" class="btn btn-danger btn-sm" value="eliminarHorario">
+                                                                <i class="fas fa-trash-alt"></i> Eliminar Clase
+                                                            </button>
+                                                        </form>
+                                                    </c:if>
+                                                </div>
+                                            </div>
+                                        </c:if>
+                                    </c:forEach>
                                 </div>
                             </div>
                         </div>
-                    </c:forEach>
+                    </c:forTokens>
                 </div>
             </c:if>
             
-            <form action="FrontController" method="post">
-                <button type="submit" name="inicio" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Volver
-                </button>
-            </form>
+            <div class="mt-4">
+                <form action="FrontController" method="post">
+                    <button type="submit" name="inicio" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner"></div>
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                const forms = document.querySelectorAll('form');
+                const buttons = document.querySelectorAll('button[type="submit"]');
+
+                // Función para limpiar cookies inválidas
+                function cleanInvalidCookies() {
+                    document.cookie.split(";").forEach(function(c) {
+                        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+                    });
+                }
+
+                // Limpiar cookies inválidas al cargar la página
+                cleanInvalidCookies();
+
+                // Función para mostrar el overlay de carga
+                function showLoading() {
+                    loadingOverlay.style.display = 'flex';
+                    buttons.forEach(button => {
+                        button.disabled = true;
+                    });
+                }
+
+                // Función para ocultar el overlay de carga
+                function hideLoading() {
+                    loadingOverlay.style.display = 'none';
+                    buttons.forEach(button => {
+                        button.disabled = false;
+                    });
+                }
+
+                // Agregar evento submit a todos los formularios
+                forms.forEach(form => {
+                    form.addEventListener('submit', function(e) {
+                        // No prevenir el envío del formulario
+                        showLoading();
+                        cleanInvalidCookies();
+                        // Permitir que el formulario se envíe normalmente
+                        return true;
+                    });
+                });
+
+                // Manejar errores de red
+                window.addEventListener('error', function(e) {
+                    if (e.target.tagName === 'IMG' || e.target.tagName === 'SCRIPT') {
+                        hideLoading();
+                    }
+                });
+
+                // Manejar cuando la página termina de cargar
+                window.addEventListener('load', function() {
+                    hideLoading();
+                    cleanInvalidCookies();
+                });
+
+                // Manejar cuando el usuario intenta navegar fuera de la página
+                window.addEventListener('beforeunload', function() {
+                    showLoading();
+                });
+            });
+        </script>
     </body>
 </html>

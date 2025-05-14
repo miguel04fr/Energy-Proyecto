@@ -91,7 +91,7 @@ public class Delete extends HttpServlet {
                 Logger.getLogger(Delete.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        if (request.getParameter("eliminarGerente") != null) {
+            if (request.getParameter("eliminarGerente") != null) {
             int gerenteId = Integer.parseInt(request.getParameter("gerenteId"));
             try {
                 usuarioDAO.eliminar(gerenteId);

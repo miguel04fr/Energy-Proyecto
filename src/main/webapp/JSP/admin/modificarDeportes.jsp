@@ -22,7 +22,7 @@
                         <div class="card-body">
                             <c:if test="${not empty requestScope.error}">
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <i class="fas fa-exclamation-circle"></i> ${requestScope.error}
+                                    <i class="fas fa-exclamation-circle"></i> ${requestScope.mesajeErrorDeporte}
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                             </c:if>

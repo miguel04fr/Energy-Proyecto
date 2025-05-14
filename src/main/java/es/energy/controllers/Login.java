@@ -83,7 +83,7 @@ public class Login extends HttpServlet {
                 // Comparar las contraseñas encriptadas
                 if (usuario.getClave().equals(passwordEncriptada)) {
                     session.setAttribute("usuarioLogueado", usuario);
-                    if (usuario.getRol().equals(Usuario.Rol.ADMIN)) {
+                    if (usuario.getRol().equals(Usuario.Rol.ADMIN)||usuario.getRol().equals(Usuario.Rol.ENTRENADOR)) {
                         url = "JSP/admin/indexAdmin.jsp";
                     }else{
                         try {
