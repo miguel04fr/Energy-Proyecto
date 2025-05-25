@@ -115,8 +115,12 @@
             }
 
             @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
             }
 
             .btn:disabled {
@@ -127,10 +131,10 @@
     </head>
     <body>
         <jsp:include page="/INC/cabecera.jsp" />
-        
+
         <div class="container">
             <h1 class="text-center my-4">Lista de Horarios</h1>
-            
+
             <c:if test="${sessionScope.usuarioLogueado.rol == 'GERENTE'}">
                 <div class="admin-actions mb-4">
                     <form action="FrontController" method="post">
@@ -141,11 +145,11 @@
                     </form>
                 </div>
             </c:if>
-            
+
             <c:if test="${not empty errorMessage}">
                 <div class="error-message">${errorMessage}</div>
             </c:if>
-            
+
             <c:if test="${empty listaHorarios}">
                 <p class="info-message">No hay horarios disponibles</p>
             </c:if>
@@ -169,6 +173,7 @@
                                                 <div class="horario-info">
                                                     <span><strong>Deporte:</strong> ${horario.deporte.nombreDeporte}</span>
                                                     <span><strong>Entrenador:</strong> ${horario.usuario.nombre} ${horario.usuario.apellido}</span>
+                                                    <span><strong>Dia:</strong> ${horario.diaSemana}</span>
                                                     <span><strong>Hora:</strong> ${horario.hora}</span>
                                                     <span><strong>Plazas:</strong> ${horario.plazasOcupadas}/${horario.plazasOfertadas}</span>
                                                     <span><strong>Sala:</strong> ${horario.salaId}</span>
@@ -176,13 +181,24 @@
                                                 <div class="btn-container">
                                                     <c:if test="${sessionScope.usuarioLogueado.rol == 'USUARIO'}">
                                                     <c:if test="${sessionScope.usuarioLogueado.activo == true}">
+                                                    <c:if test="${sessionScope.usuarioLogueado.numeroInscripcion <= 15}">
+                                                    
+                                                    <c:if test="${horario.tieneClaseEnMismoHorario}">
+                                                        <form action="${pageContext.request.contextPath}/FrontController" method="post">
+                                                            <button type="submit" class="btn btn-danger btn-sm" name="listarInscripciones" >
+                                                                <i class="fas fa-times"></i> Ya tiene una clase a esta hora  o ya estas incrito(consultar inscripciones)
+                                                            </button>
+                                                        </form>
+                                                    
+                                                    </c:if>
+                                                    
+                                                    <c:if test="${not horario.tieneClaseEnMismoHorario}">
                                                         <c:if test="${horario.plazasOcupadas < horario.plazasOfertadas}">
                                                             <c:choose>
                                                                 <c:when test="${empty horario.inscripcion}">
                                                                     <form action="${pageContext.request.contextPath}/Create" method="post">
                                                                         <input type="hidden" name="horarioId" value="${horario.id}">
                                                                         <input type="hidden" name="inscripcionId" value="${horario.inscripcion.id}">
-                                                                        <input type="hidden" name="confirmarInscripcion" value="true">
                                                                         <button type="submit" class="btn btn-success btn-sm" name="confirmarInscripcion" value="inscripcion">
                                                                             <i class="fas fa-user-plus"></i> Inscribirse
                                                                         </button>
@@ -195,26 +211,31 @@
                                                                 </c:otherwise>
                                                             </c:choose>
                                                         </c:if>
+                                                        
                                                         <c:if test="${horario.plazasOcupadas >= horario.plazasOfertadas}">
                                                             <button type="button" class="btn btn-danger btn-sm" disabled>
                                                                 <i class="fas fa-times"></i> Todas las plazas ocupadas
                                                             </button>
                                                         </c:if>
-                                                        
-                                                            </c:if>
-
-                                                            <c:if test="${sessionScope.usuarioLogueado.activo == false}">
-                                                                <button type="button" class="btn btn-secondary btn-sm" disabled>
-                                                                    <i class="fas fa-times"></i> Usuario inactivo pendiente de aprobación por pago
-                                                                </button>
-                                                            
-                                                        </c:if>
-
                                                     </c:if>
+                                                    
+                                                    </c:if>
+                                                    <c:if test="${sessionScope.usuarioLogueado.numeroInscripcion > 15}">
+                                                        <button type="button" class="btn btn-danger btn-sm">
+                                                            <i class="fas fa-times"></i> No puede inscribirse a más de 16 clases
+                                                        </button>
+                                                    </c:if>
+                                                    </c:if>
+                                                    <c:if test="${sessionScope.usuarioLogueado.activo == false}">
+                                                        <button type="button" class="btn btn-secondary btn-sm" disabled>
+                                                            <i class="fas fa-times"></i> Usuario inactivo pendiente de aprobación por pago
+                                                        </button>
+                                                    </c:if>
+                                                    </c:if>
+                                                
                                                     <c:if test="${sessionScope.usuarioLogueado.rol == 'GERENTE'}">
                                                         <form action="${pageContext.request.contextPath}/Delete" method="post">
                                                             <input type="hidden" name="horarioId" value="${horario.id}">
-                                                            <input type="hidden" name="eliminarHorario" value="true">
                                                             <button type="submit" name="eliminarHorario" class="btn btn-danger btn-sm" value="eliminarHorario">
                                                                 <i class="fas fa-trash-alt"></i> Eliminar Clase
                                                             </button>
@@ -230,7 +251,7 @@
                     </c:forTokens>
                 </div>
             </c:if>
-            
+
             <div class="mt-4">
                 <form action="FrontController" method="post">
                     <button type="submit" name="inicio" class="btn btn-secondary">
@@ -246,14 +267,13 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 const loadingOverlay = document.getElementById('loadingOverlay');
                 const forms = document.querySelectorAll('form');
-                const buttons = document.querySelectorAll('button[type="submit"]');
 
                 // Función para limpiar cookies inválidas
                 function cleanInvalidCookies() {
-                    document.cookie.split(";").forEach(function(c) {
+                    document.cookie.split(";").forEach(function (c) {
                         document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
                     });
                 }
@@ -264,22 +284,18 @@
                 // Función para mostrar el overlay de carga
                 function showLoading() {
                     loadingOverlay.style.display = 'flex';
-                    buttons.forEach(button => {
-                        button.disabled = true;
-                    });
+
                 }
 
                 // Función para ocultar el overlay de carga
                 function hideLoading() {
                     loadingOverlay.style.display = 'none';
-                    buttons.forEach(button => {
-                        button.disabled = false;
-                    });
+
                 }
 
                 // Agregar evento submit a todos los formularios
                 forms.forEach(form => {
-                    form.addEventListener('submit', function(e) {
+                    form.addEventListener('submit', function (e) {
                         // No prevenir el envío del formulario
                         showLoading();
                         cleanInvalidCookies();
@@ -289,20 +305,20 @@
                 });
 
                 // Manejar errores de red
-                window.addEventListener('error', function(e) {
+                window.addEventListener('error', function (e) {
                     if (e.target.tagName === 'IMG' || e.target.tagName === 'SCRIPT') {
                         hideLoading();
                     }
                 });
 
                 // Manejar cuando la página termina de cargar
-                window.addEventListener('load', function() {
+                window.addEventListener('load', function () {
                     hideLoading();
                     cleanInvalidCookies();
                 });
 
                 // Manejar cuando el usuario intenta navegar fuera de la página
-                window.addEventListener('beforeunload', function() {
+                window.addEventListener('beforeunload', function () {
                     showLoading();
                 });
             });

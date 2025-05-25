@@ -198,12 +198,7 @@
                                         </form>
                                     </td>
                                     <td>
-                                        <form action="Delete" method="post">
-                                            <input type="hidden" name="id" value="${usuario.id}">
-                                            <button class="btn btn-danger btn-sm" type="submit" name="eliminarUsuario" value="eliminarUsuario">
-                                                <i class="fas fa-trash-alt"></i> Eliminar
-                                            </button>
-                                        </form>
+                                     
 
                                     
                                     </td>

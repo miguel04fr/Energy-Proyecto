@@ -44,9 +44,7 @@
                         <button type="submit" name="crearEntrenador" class="btn btn-success">
                             <i class="fas fa-plus"></i> Crear Nuevo Entrenador
                         </button>
-                        <button type="submit" name="listarDeportes" class="btn btn-info">
-                            <i class="fas fa-list"></i> Gestionar Deportes
-                        </button>
+                        
                     </form>
                 </div>
             </c:if>
@@ -64,7 +62,7 @@
                             <div class="card-body">
                                 <p class="card-text">
                                     <strong><i class="fas fa-phone"></i> Teléfono:</strong> ${entrenador.telefono}<br>
-                                    <strong><i class="fas fa-user"></i> Usuario:</strong> ${entrenador.nombre} ${entrenador.apellido}<br>
+                                    <strong><i class="fas fa-user"></i> Nombre:</strong> ${entrenador.nombre} ${entrenador.apellido}<br>
                                     <strong><i class="fas fa-envelope"></i> Email:</strong> ${entrenador.email}<br>
                                     <strong><i class="fas fa-calendar-alt"></i> Fecha de Nacimiento:</strong> ${entrenador.fechaNacimiento}<br>
 

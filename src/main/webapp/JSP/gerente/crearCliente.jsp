@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Crear Gerente/Administrador - Energy</title>
+        <title>Crear Cliente - Energy</title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/INC/estilos.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/crearGerenteAdmin.css"/>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -21,7 +21,7 @@
         
         <div class="container">
             <div class="form-container">
-                <h1 class="page-title">Crear Nuevo Gerente/Administrador</h1>
+                <h1 class="page-title">Crear Nuevo Cliente</h1>
                 
                 <c:if test="${not empty error}">
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">

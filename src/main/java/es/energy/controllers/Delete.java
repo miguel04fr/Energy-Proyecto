@@ -122,36 +122,7 @@ public class Delete extends HttpServlet {
             } catch (SQLException ex) {
                 Logger.getLogger(Delete.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } else if (request.getParameter("eliminarEntrenador") != null) {
-            int entrenadorId = Integer.parseInt(request.getParameter("id"));
-            try {
-                usuarioDAO.eliminar(entrenadorId);
-            } catch (SQLException ex) {
-                Logger.getLogger(Delete.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
-                listaEntrenadores = usuarioDAO.obtenerUsuariosPorRolEntrenador();
-                request.setAttribute("listaEntrenadores", listaEntrenadores);
-                url = "JSP/gerente/modificarEntrenadores.jsp";
-            } catch (SQLException ex) {
-                Logger.getLogger(Delete.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else if (request.getParameter("eliminarUsuario") != null) {
-            int usuarioId = Integer.parseInt(request.getParameter("id"));
-            try {
-                usuarioDAO.eliminar(usuarioId);
-            } catch (SQLException ex) {
-                Logger.getLogger(Delete.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
-                listaUsuarios = usuarioDAO.obtenerUsuariosPorRolCliente();
-                request.setAttribute("listaUsuarios", listaUsuarios);
-                url = "JSP/gerente/altaBajaUsuarios.jsp";
-            } catch (SQLException ex) {
-                Logger.getLogger(Delete.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        if (request.getParameter("cancelarInscripcion") != null) {
+        } else if (request.getParameter("cancelarInscripcion") != null) {
             int inscripcionId = Integer.parseInt(request.getParameter("inscripcionId"));
             int horarioId = Integer.parseInt(request.getParameter("horarioId"));
             try {

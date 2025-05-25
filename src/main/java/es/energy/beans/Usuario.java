@@ -23,6 +23,7 @@ public class Usuario {
     private Rol rol;
     private String iban;
     private boolean activo;
+    private int numeroInscripcion;
     public enum Rol {
         USUARIO, ADMIN, GERENTE, ENTRENADOR
     }
@@ -116,5 +117,11 @@ public class Usuario {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+    public int getNumeroInscripcion() {
+        return numeroInscripcion;
+    }
+    public void setNumeroInscripcion(int numeroInscripcion) {
+        this.numeroInscripcion = numeroInscripcion;
     }
 }

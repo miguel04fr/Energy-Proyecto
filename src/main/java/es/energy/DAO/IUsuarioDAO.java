@@ -21,6 +21,8 @@ public interface IUsuarioDAO {
     // Método para obtener todos los usuarios
     public List<Usuario> obtenerTodos() throws SQLException;
 
+    public List<Usuario> obtenerEntrenadoresActivos () throws SQLException ;
+
     // Método para actualizar un usuario
     public void actualizar(Usuario usuario) throws SQLException;
 

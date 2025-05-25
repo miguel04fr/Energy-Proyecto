@@ -14,13 +14,14 @@ public class InscripcionDAO implements IInscripcionDAO {
 
     @Override
     public void agregarInscripcion(Inscripcion inscripcion) throws SQLException {
-        String sql = "INSERT INTO inscripciones (UsuarioId, HorarioId, FechaInscripcion) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO inscripciones (UsuarioId, HorarioId, FechaInscripcion, DiaSemana) VALUES (?, ?, ?, ?)";
         try (Connection con = ConnectionFactory.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             
             stmt.setInt(1, inscripcion.getUsuarioId());
             stmt.setInt(2, inscripcion.getHorarioId());
             stmt.setDate(3, inscripcion.getFechaInscripcion());
+            stmt.setString(4, inscripcion.getDiaSemana());
             
             stmt.executeUpdate();
             
@@ -34,14 +35,15 @@ public class InscripcionDAO implements IInscripcionDAO {
 
     @Override
     public void actualizarInscripcion(Inscripcion inscripcion) throws SQLException {
-        String sql = "UPDATE inscripciones SET UsuarioId = ?, HorarioId = ?, FechaInscripcion = ? WHERE Id = ?";
+        String sql = "UPDATE inscripciones SET UsuarioId = ?, HorarioId = ?, FechaInscripcion = ?, DiaSemana = ? WHERE Id = ?";
         try (Connection con = ConnectionFactory.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
             
             stmt.setInt(1, inscripcion.getUsuarioId());
             stmt.setInt(2, inscripcion.getHorarioId());
             stmt.setDate(3, inscripcion.getFechaInscripcion());
-            stmt.setInt(4, inscripcion.getId());
+            stmt.setString(4, inscripcion.getDiaSemana());
+            stmt.setInt(5, inscripcion.getId());
             
             stmt.executeUpdate();
         }
@@ -139,6 +141,7 @@ public class InscripcionDAO implements IInscripcionDAO {
                     inscripcion.setUsuarioId(rs.getInt("UsuarioId"));
                     inscripcion.setHorarioId(rs.getInt("HorarioId"));
                     inscripcion.setFechaInscripcion(rs.getDate("FechaInscripcion"));
+                    inscripcion.setDiaSemana(rs.getString("DiaSemana"));
                     return inscripcion;
                 }
             }
@@ -151,7 +154,8 @@ public class InscripcionDAO implements IInscripcionDAO {
             rs.getInt("Id"),
             rs.getInt("UsuarioId"),
             rs.getInt("HorarioId"),
-            rs.getDate("FechaInscripcion")
+            rs.getDate("FechaInscripcion"),
+            rs.getString("DiaSemana")
         );
     }
 } 

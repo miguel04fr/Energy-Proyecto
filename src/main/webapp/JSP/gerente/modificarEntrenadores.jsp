@@ -148,7 +148,7 @@
                                 <th>IBAN</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
-                                <th>Eliminar</th>
+                              
                                 <th>Editar</th>
                             </tr>
                         </thead>
@@ -188,14 +188,7 @@
                                             </button>
                                         </form>
                                     </td>
-                                    <td>
-                                        <form action="Delete" method="post">
-                                            <input type="hidden" name="id" value="${usuario.id}">
-                                            <button class="btn btn-danger btn-sm" type="submit" name="eliminarEntrenador" value="eliminarEntrenador">
-                                                <i class="fas fa-trash-alt"></i> Eliminar
-                                            </button>
-                                        </form>
-                                    </td>
+                                   
                                     <td>
                                         <form action="Update" method="post">
                                             <input type="hidden" name="id" value="${usuario.id}">

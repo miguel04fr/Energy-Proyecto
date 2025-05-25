@@ -23,6 +23,7 @@ public class Horario {
     private Deporte deporte;
     private Usuario usuario;
     private Inscripcion inscripcion;
+    private boolean tieneClaseEnMismoHorario;
 
     public Horario() {
     }
@@ -124,5 +125,13 @@ public class Horario {
 
     public void setInscripcion(Inscripcion inscripcion) {
         this.inscripcion = inscripcion;
+    }
+
+    public boolean getTieneClaseEnMismoHorario() {
+        return tieneClaseEnMismoHorario;
+    }
+
+    public void setTieneClaseEnMismoHorario(boolean tieneClaseEnMismoHorario) {
+        this.tieneClaseEnMismoHorario = tieneClaseEnMismoHorario;
     }
 }

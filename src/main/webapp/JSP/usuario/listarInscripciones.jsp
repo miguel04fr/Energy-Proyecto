@@ -251,7 +251,7 @@
                     <c:forEach var="inscripcion" items="${listaInscripciones}">
                         <div class="inscripcion-card">
                             <div class="inscripcion-header">
-                                <span class="deporte-titulo">${inscripcion.horario.deporte.nombreDeporte}</span>
+                                <span class="deporte-titulo">${inscripcion.deporte.nombreDeporte}</span>
                                 <span class="fecha-badge"><fmt:formatDate value="${inscripcion.fechaInscripcion}" pattern="dd/MM/yyyy"/></span>
                             </div>
                             <div class="inscripcion-body">

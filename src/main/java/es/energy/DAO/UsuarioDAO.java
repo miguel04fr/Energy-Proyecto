@@ -363,5 +363,32 @@ public class UsuarioDAO implements IUsuarioDAO {
             e.printStackTrace();
         }
     }
+    @Override
+    public List<Usuario> obtenerEntrenadoresActivos () throws SQLException {
+        String sql = "SELECT * FROM usuarios WHERE Rol = 'entrenador' AND Activo = true";
+        List<Usuario> entrenadoresActivos = new ArrayList<>();
+        try (Connection con = ConnectionFactory.getConnection(); PreparedStatement stmt = con.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setId(rs.getInt("Id"));
+                usuario.setDni(rs.getString("Dni"));
+                usuario.setFechaNacimiento(rs.getDate("FechaNacimiento"));
+                usuario.setNombre(rs.getString("Nombre"));
+                usuario.setApellido(rs.getString("Apellido"));
+                usuario.setEmail(rs.getString("Email"));
+                usuario.setClave(rs.getString("Clave"));
+                usuario.setTelefono(rs.getString("Telefono"));
+                usuario.setIban(rs.getString("IBAN"));
+                usuario.setRol(Usuario.Rol.valueOf(rs.getString("Rol").toUpperCase()));
+                usuario.setActivo(rs.getBoolean("Activo"));
+                entrenadoresActivos.add(usuario);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return entrenadoresActivos;
+    }
     
+      
 }

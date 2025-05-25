@@ -11,17 +11,20 @@ public class Inscripcion {
     private int usuarioId;
     private int horarioId;
     private Date fechaInscripcion;
+    private String diaSemana;
     private Usuario usuario;
     private Horario horario;
     private Deporte deporte;
+    
     public Inscripcion() {
     }
 
-    public Inscripcion(int id, int usuarioId, int horarioId, Date fechaInscripcion) {
+    public Inscripcion(int id, int usuarioId, int horarioId, Date fechaInscripcion, String diaSemana) {
         this.id = id;
         this.usuarioId = usuarioId;
         this.horarioId = horarioId;
         this.fechaInscripcion = fechaInscripcion;
+        this.diaSemana = diaSemana;
     }
 
     public int getId() {
@@ -54,6 +57,14 @@ public class Inscripcion {
 
     public void setFechaInscripcion(Date fechaInscripcion) {
         this.fechaInscripcion = fechaInscripcion;
+    }
+
+    public String getDiaSemana() {
+        return diaSemana;
+    }
+
+    public void setDiaSemana(String diaSemana) {
+        this.diaSemana = diaSemana;
     }
 
     public Usuario getUsuario() {

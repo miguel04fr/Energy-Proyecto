@@ -6,16 +6,21 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
 import es.energy.DAO.IHorarioDAO;
+import es.energy.DAO.IUsuarioDAO;
 import es.energy.DAOFactory.DAOFactory;
 import es.energy.beans.Horario;
+import es.energy.beans.Usuario;
 
 @WebServlet(name = "HorarioAjaxController", urlPatterns = {"/HorarioAjaxController"})
 public class HorarioAjaxController extends HttpServlet {
@@ -35,6 +40,7 @@ public class HorarioAjaxController extends HttpServlet {
         try {
             DAOFactory daof = DAOFactory.getDAOFactory();
             IHorarioDAO horarioDAO = daof.getHorarioDAO();
+            IUsuarioDAO usuarioDAO = daof.getUsurioDAO();
             List<Horario> horarios = horarioDAO.obtenerTodosLosHorarios();
             
             if ("validarHorario".equals(action)) {
@@ -99,6 +105,9 @@ public class HorarioAjaxController extends HttpServlet {
                 }
                 
                 response.getWriter().write(new Gson().toJson(horasDisponibles));
+            } else if ("getEntrenadoresActivos".equals(action)) {
+                List<Usuario> entrenadoresActivos = usuarioDAO.obtenerEntrenadoresActivos();
+                response.getWriter().write(new Gson().toJson(entrenadoresActivos));
             }
             
         } catch (SQLException | NumberFormatException e) {

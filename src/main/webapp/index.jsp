@@ -4,8 +4,8 @@
     <head>
     <c:set var="contexto" value="${pageContext.request.contextPath}" scope="application"/>
      <jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
-     
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <c:url var="estilo" value="/CSS/inicio.css" scope="application" />
         <c:set var="contexto" value="${pageContext.request.contextPath}" scope="application"/>
     <meta charset="UTF-8">
@@ -14,6 +14,24 @@
 </head>
 <body>
   <jsp:include page="/INC/cabecera.jsp"/>
+  <c:if test="${not empty error}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            title: "¡Atención!",
+            text: "${error}",
+            icon: "error",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "Aceptar"
+        });
+        Swal.showLoading();
+        setTimeout(() => {
+            Swal.close();
+        }, 3000); // Cierra el mensaje después de 3 segundos
+        
+    </script>
+</c:if>
+
 
     <div class="hero-banner">
         <div class="hero-content">

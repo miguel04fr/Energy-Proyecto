@@ -1,4 +1,4 @@
-/*
+    /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
@@ -68,7 +68,7 @@ public class FrontController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url = "index.jsp";
-        HttpSession session = request.getSession();
+            HttpSession session = request.getSession();
         DAOFactory daof = DAOFactory.getDAOFactory();
         List<Deporte> listaDeportes = new ArrayList<>();
         List<Usuario> listaEntrenadores = new ArrayList<>();
@@ -89,7 +89,7 @@ public class FrontController extends HttpServlet {
         if (request.getParameter("crearInscripcion") != null) {
 
             try {
-                listaEntrenadores = usuarioDAO.obtenerUsuariosPorRolEntrenador();
+                listaEntrenadores = usuarioDAO.obtenerEntrenadoresActivos();
                 listaDeportes = deporteDAO.obtenerTodosLosDeportes();
                 request.setAttribute("listaDeportes", listaDeportes);
                 request.setAttribute("listaEntrenadores", listaEntrenadores);
@@ -133,19 +133,33 @@ public class FrontController extends HttpServlet {
 
             String nombreDeporte = request.getParameter("selectedSport");
             
+            if (usuario!=null){
                 try {
-                    deporte = deporteDAO.obtenerDeportePorNombre(request.getParameter("selectedSport"));
-                    listaHorarios = horarioDAO.obtenerHorariosPorDeporte(deporte.getId());
+                    deporte = deporteDAO.obtenerDeportePorNombre(nombreDeporte);
+    
+                     listaHorarios = horarioDAO.obtenerHorariosPorDeporte(deporte.getId());
+                    // Cargar datos relacionados para cada horario
                     for (Horario h : listaHorarios) {
-                        h.setDeporte(deporte);
-                        h.setUsuario(usuarioDAO.obtenerUsuarioPorId(h.getEntrenadorId()));
+                        if (h.getDeporteId() > 0) {
+                            h.setDeporte(deporteDAO.obtenerDeportePorId(h.getDeporteId()));
+                        }
+                        if (h.getEntrenadorId() > 0) {
+                            h.setUsuario(usuarioDAO.obtenerUsuarioPorId(h.getEntrenadorId()));
+                        }
                     }
-                    session.setAttribute("listaHorarios", listaHorarios);
-                    session.setAttribute("deporte", deporte);
-                    url = "JSP/inscripciones/confirmarInscripcion.jsp";
-                } catch (SQLException ex) {
-                    Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                    request.setAttribute("listaHorarios", listaHorarios);
+                    
+    
+                    url = "JSP/admin/verHorario.jsp";
+                    } catch (SQLException ex) {
+                        Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+            }else{
+                request.setAttribute("mensajeInicioSesion", "Debes iniciar sesión para ver los horarios de este deporte");
+                request.setAttribute("error", "Tienes que iniciar sesion para ver los horarios");
+                url= "index.jsp";
+            }
+        
             
         } else if (request.getParameter("listarDeportes") != null) {
             try {
@@ -171,15 +185,54 @@ public class FrontController extends HttpServlet {
             }
         } else if (request.getParameter("listarHorarios") != null) {
             try {
-
+                usuario.setNumeroInscripcion(0);
                 listaHorarios = horarioDAO.obtenerTodosLosHorarios();
+                listaInscripciones = inscripcionDAO.obtenerInscripcionesPorUsuario(usuario.getId());
+                for (Inscripcion i : listaInscripciones) {
+                    usuario.setNumeroInscripcion(usuario.getNumeroInscripcion() + 1);
+                }
+                
+                // Obtener todas las inscripciones del usuario para verificar horarios
+                List<Inscripcion> inscripcionesUsuario = new ArrayList<>();
+                if (session.getAttribute("usuarioLogueado") != null) {
+                    Usuario usuarioActual = (Usuario) session.getAttribute("usuarioLogueado");
+                    inscripcionesUsuario = inscripcionDAO.obtenerInscripcionesPorUsuario(usuarioActual.getId());
+                    // Cargar los horarios para cada inscripción
+                    for (Inscripcion insc : inscripcionesUsuario) {
+                        if (insc != null) {
+                            insc.setHorario(horarioDAO.obtenerHorarioPorId(insc.getHorarioId()));
+                        }
+                    }
+                }
+                
                 for (Horario h : listaHorarios) {
                     h.setDeporte(deporteDAO.obtenerDeportePorId(h.getDeporteId()));
                     h.setUsuario(usuarioDAO.obtenerUsuarioPorId(h.getEntrenadorId()));
-                    // Obtener la inscripción del usuario actual para este horario
+
+                    // Verificar si el usuario tiene una clase en el mismo día y hora
+                    boolean tieneClaseEnMismoHorario = false;
                     if (session.getAttribute("usuarioLogueado") != null) {
                         Usuario usuarioActual = (Usuario) session.getAttribute("usuarioLogueado");
-                         inscripcion = inscripcionDAO.obtenerInscripcionPorUsuarioYHorario(usuarioActual.getId(), h.getId());
+                        for (Inscripcion insc : inscripcionesUsuario) {
+                            if (insc != null && insc.getHorario() != null && 
+                                insc.getHorario().getDiaSemana() != null && 
+                                insc.getHorario().getHora() != null &&
+                                insc.getHorario().getDiaSemana().equals(h.getDiaSemana()) && 
+                                insc.getHorario().getHora().equals(h.getHora())) {
+                                tieneClaseEnMismoHorario = true;
+                                break;
+                            }
+                        }
+                    }
+                    h.setTieneClaseEnMismoHorario(tieneClaseEnMismoHorario);
+
+                    // Obtener la inscripción específica para este horario
+                    if (session.getAttribute("usuarioLogueado") != null) {
+                        Usuario usuarioActual = (Usuario) session.getAttribute("usuarioLogueado");
+                        inscripcion = inscripcionDAO.obtenerInscripcionPorUsuarioYHorario(usuarioActual.getId(), h.getId());
+                        if(inscripcion != null) {
+                            inscripcion.setHorario(h);
+                        }
                         h.setInscripcion(inscripcion);
                     }
                 }

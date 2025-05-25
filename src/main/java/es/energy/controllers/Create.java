@@ -159,39 +159,61 @@ public class Create extends HttpServlet {
                 Usuario usuarioInscrito = (Usuario) session.getAttribute("usuarioLogueado");
                 inscripcion.setUsuarioId(usuarioInscrito.getId());
                 inscripcion.setFechaInscripcion(new java.sql.Date(new java.util.Date().getTime()));
-                inscripcionDAO.agregarInscripcion(inscripcion);
                 
                 // Obtener información del usuario y el horario
                 Horario horarioInscripcion = horarioDAO.obtenerHorarioPorId(inscripcion.getHorarioId());
-                horarioInscripcion.setPlazasOcupadas(horarioInscripcion.getPlazasOcupadas() + 1);
-                horarioDAO.actualizarHorario(horarioInscripcion);
-                Deporte deporteInscripcion = deporteDAO.obtenerDeportePorId(horarioInscripcion.getDeporteId());
                 
-                // Enviar correo de confirmación
-                String asunto = "Confirmación de Inscripción - Energy";
-                String contenido = "Hola " + usuarioInscrito.getNombre() + ",\n\n" +
-                                 "Tu inscripción ha sido confirmada:\n\n" +
-                                 "Deporte: " + deporteInscripcion.getNombreDeporte() + "\n" +
-                                 "Día: " + horarioInscripcion.getDiaSemana() + "\n" +
-                                 "Hora: " + horarioInscripcion.getHora() + "\n" +
-                                 "Sala: " + horarioInscripcion.getSalaId() + "\n\n" +
-                                 "¡Gracias por elegir Energy!";
+                // Verificar si el usuario ya tiene una clase en el mismo horario
+                List<Inscripcion> inscripcionesUsuario = inscripcionDAO.obtenerInscripcionesPorUsuario(usuarioInscrito.getId());
+                boolean tieneClaseEnMismoHorario = false;
                 
-               EmailUtil.enviarCorreo(usuarioInscrito.getEmail(), asunto, contenido);
-                try {
-
-                    listaInscripciones = inscripcionDAO.obtenerInscripcionesPorUsuario(usuarioInscrito.getId());
-                    for (Inscripcion i : listaInscripciones) {
-                        i.setHorario(horarioDAO.obtenerHorarioPorId(i.getHorarioId()));
-                        i.setDeporte(deporteDAO.obtenerDeportePorId(i.getHorario().getDeporteId()));
-                        i.setUsuario(usuarioDAO.obtenerUsuarioPorId(i.getHorario().getEntrenadorId()));
+                for (Inscripcion insc : inscripcionesUsuario) {
+                    if (insc != null) {
+                        insc.setHorario(horarioDAO.obtenerHorarioPorId(insc.getHorarioId()));
+                        if (insc.getHorario() != null && 
+                            insc.getHorario().getDiaSemana() != null && 
+                            insc.getHorario().getHora() != null &&
+                            insc.getHorario().getDiaSemana().equals(horarioInscripcion.getDiaSemana()) && 
+                            insc.getHorario().getHora().equals(horarioInscripcion.getHora())) {
+                            tieneClaseEnMismoHorario = true;
+                            break;
+                        }
                     }
-                } catch (SQLException ex) {
-                    Logger.getLogger(Create.class.getName()).log(Level.SEVERE, null, ex);
-                }   
-                request.setAttribute("listaInscripciones", listaInscripciones);
-
-                url="JSP/usuario/listarInscripciones.jsp";
+                }
+                
+                if (tieneClaseEnMismoHorario) {
+                    request.setAttribute("errorMessage", "Ya tienes una clase programada en este horario");
+                    url = "JSP/admin/verHorario.jsp";
+                } else {
+                    horarioInscripcion.setPlazasOcupadas(horarioInscripcion.getPlazasOcupadas() + 1);
+                    horarioDAO.actualizarHorario(horarioInscripcion);
+                    Deporte deporteInscripcion = deporteDAO.obtenerDeportePorId(horarioInscripcion.getDeporteId());
+                    inscripcion.setDiaSemana(horarioInscripcion.getDiaSemana());
+                    inscripcionDAO.agregarInscripcion(inscripcion);
+                    // Enviar correo de confirmación
+                    String asunto = "Confirmación de Inscripción - Energy";
+                    String contenido = "Hola " + usuarioInscrito.getNombre() + ",\n\n" +
+                                     "Tu inscripción ha sido confirmada:\n\n" +
+                                     "Deporte: " + deporteInscripcion.getNombreDeporte() + "\n" +
+                                     "Día: " + horarioInscripcion.getDiaSemana() + "\n" +
+                                     "Hora: " + horarioInscripcion.getHora() + "\n" +
+                                     "Sala: " + horarioInscripcion.getSalaId() + "\n\n" +
+                                     "¡Gracias por elegir Energy!";
+                    
+                    EmailUtil.enviarCorreo(usuarioInscrito.getEmail(), asunto, contenido);
+                    try {
+                        listaInscripciones = inscripcionDAO.obtenerInscripcionesPorUsuario(usuarioInscrito.getId());
+                        for (Inscripcion i : listaInscripciones) {
+                            i.setHorario(horarioDAO.obtenerHorarioPorId(i.getHorarioId()));
+                            i.setDeporte(deporteDAO.obtenerDeportePorId(i.getHorario().getDeporteId()));
+                            i.setUsuario(usuarioDAO.obtenerUsuarioPorId(i.getHorario().getEntrenadorId()));
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Create.class.getName()).log(Level.SEVERE, null, ex);
+                    }   
+                    request.setAttribute("listaInscripciones", listaInscripciones);
+                    url = "JSP/usuario/listarInscripciones.jsp";
+                }
             } else if (request.getParameter("crearGerenteAdmin") != null) {
                 DateConverter converter = new DateConverter();
                 converter.setPattern("yyyy-MM-dd");

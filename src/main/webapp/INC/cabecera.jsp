@@ -33,6 +33,7 @@
                         <button type="submit" name="listarDeportes" value="listarDeportes">Deportes</button>
                         <button type="submit" name="listarHorarios" value="listarHorarios">Horarios</button>
                         <button type="submit" name="listarEntrenadores" value="listarEntrenadores">Entrenadores</button>
+                        
                         <button type="submit" name="listarInscripciones" value="listarInscripciones">Inscripciones</button>
                     </c:if>
                     <c:if test="${sessionScope.usuarioLogueado.rol == 'ADMIN'}">
@@ -81,7 +82,11 @@
                                 Mi Perfil
                             </button>
                         </c:if>
-
+                        </form>
+                    
+                        <form action="FrontController" method="post">
+                    
+                            <input type="hidden" name="cerrarSesion" value="cerrarSesion">
                             <button type="submit" name="cerrarSesion" value="cerrarSesion" class="cerrar-sesion">
                                 <i class="fas fa-sign-out-alt"></i>
                                 Cerrar Sesión
