@@ -1215,6 +1215,7 @@ footer {
     
     .sports-container {
         grid-template-columns: 1fr;
+        width: 269px;
     }
     
     .carousel-item {

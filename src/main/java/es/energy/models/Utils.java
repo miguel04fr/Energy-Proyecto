@@ -3,9 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package es.energy.models;
-
+ 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 /**
  *
@@ -31,6 +32,14 @@ public class Utils {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("No se pudo generar el hash MD5", e);
         }
+    }
+    public static int generarNumeroAleatorio() {
+        Random rand = new Random();
+        
+        // Generar un número aleatorio entre 100000 y 999999
+        int numeroAleatorio = 100000 + rand.nextInt(900000);
+        
+        return numeroAleatorio;
     }
 }
 

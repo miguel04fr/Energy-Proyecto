@@ -8,6 +8,8 @@
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Gestión de Entrenadores</title>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
             <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
             <style>
@@ -122,6 +124,28 @@
         <body>
             <jsp:include page="/INC/cabecera.jsp" />
             <div class="container-fluid">
+
+                <c:if test="${not empty error}">
+                    <script>
+                        swal({
+                            title: "¡Atención!",
+                            text: "${error}",
+                            icon: "error",
+                            button: "Aceptar",
+                        });
+                    </script>
+                </c:if>
+                <c:if test="${not empty success}">
+                    <script>
+                        swal({
+                            title: "¡Éxito!",
+                            text: "${success}",
+                            icon: "success",
+                            button: "Aceptar",
+                        });
+                    </script>
+                </c:if>
+
                 <h2 class="text-center my-4">Gestión de Entrenadores</h2>
 
                 <div class="row mb-3">

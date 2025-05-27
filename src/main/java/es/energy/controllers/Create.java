@@ -97,7 +97,7 @@ public class Create extends HttpServlet {
                 BeanUtils.populate(usuario, request.getParameterMap());
                 request.setAttribute("usuario", usuario);
                 try {
-                    request.setAttribute("error", "Usuario creado correctamente");
+                    request.setAttribute("success", "Usuario creado correctamente");
                     // Encriptar la contraseña
                     usuario.setClave(Utils.md5(usuario.getClave()));
                     usuarioDAO.insertar(usuario);

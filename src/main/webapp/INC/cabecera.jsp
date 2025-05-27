@@ -132,7 +132,8 @@
                 </div>
                 
                 <button type="submit" class="submit-auth-btn" name="login">Acceder</button>
-            
+                <p class="mb-0"><a href="${contexto}/JSP/olvidarContrasena/olvidarContrasena.jsp">¿Olvidaste tu contraseña?</a></p>
+
             </form>
         </div>
         <div class="modal-footer">

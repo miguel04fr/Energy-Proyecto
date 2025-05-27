@@ -24,6 +24,14 @@ public class Usuario {
     private String iban;
     private boolean activo;
     private int numeroInscripcion;
+    private String codigoRecuperacion;
+
+    public String getCodigoRecuperacion() {
+        return codigoRecuperacion;
+    }
+    public void setCodigoRecuperacion(String codigoRecuperacion) {
+        this.codigoRecuperacion = codigoRecuperacion;
+    }
     public enum Rol {
         USUARIO, ADMIN, GERENTE, ENTRENADOR
     }

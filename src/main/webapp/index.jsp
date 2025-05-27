@@ -31,6 +31,23 @@
         
     </script>
 </c:if>
+<c:if test="${not empty success}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            title: "¡Atención!",
+            text: "${success}",
+            icon: "success",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "Aceptar"
+        });
+        Swal.showLoading();
+        setTimeout(() => {
+            Swal.close();
+        }, 3000); // Cierra el mensaje después de 3 segundos
+        
+    </script>
+</c:if>
 
 
     <div class="hero-banner">

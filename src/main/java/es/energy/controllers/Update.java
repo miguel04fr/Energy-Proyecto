@@ -30,6 +30,7 @@ import es.energy.beans.Horario;
 import es.energy.beans.Sala;
 import es.energy.beans.Usuario;
 import es.energy.models.Utils;
+
 /**
  *
  * @author zapat
@@ -37,19 +38,15 @@ import es.energy.models.Utils;
 @WebServlet(name = "Update", urlPatterns = {"/Update"})
 public class Update extends HttpServlet {
 
-   
-   
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     }
 
- 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            String url = "index.jsp";
+        String url = "index.jsp";
         DAOFactory daof = DAOFactory.getDAOFactory();
         IHorarioDAO horarioDAO = daof.getHorarioDAO();
         HttpSession session = request.getSession();
@@ -67,13 +64,13 @@ public class Update extends HttpServlet {
         Usuario entrenador = new Usuario();
         Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("usuarioLogueado");
         if (request.getParameter("actualizarSala") != null) {
-                try {
-                    BeanUtils.populate(sala, request.getParameterMap());
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InvocationTargetException ex) {
-                    Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            try {
+                BeanUtils.populate(sala, request.getParameterMap());
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvocationTargetException ex) {
+                Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+            }
             try {
                 salaDAO.actualizar(sala);
                 request.setAttribute("mensaje", "Sala actualizada correctamente");
@@ -85,7 +82,7 @@ public class Update extends HttpServlet {
             }
 
             url = "JSP/admin/modificarSalas.jsp";
-        }else   if (request.getParameter("actualizarDeporte") != null) {
+        } else if (request.getParameter("actualizarDeporte") != null) {
             try {
                 BeanUtils.populate(deporte, request.getParameterMap());
                 deporteDAO.actualizarDeporte(deporte);
@@ -96,54 +93,93 @@ public class Update extends HttpServlet {
             } catch (IllegalAccessException | InvocationTargetException | SQLException ex) {
                 Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }else if (request.getParameter("cambiarEstadoUsuario") != null) {
-           int id = Integer.parseInt(request.getParameter("id"));
-           boolean activo = Boolean.TRUE;
-           String cambiarEstado = request.getParameter("cambiarEstadoUsuario");
-           if(cambiarEstado.equals("true")){
-            activo = Boolean.TRUE;
-           }else{
-             activo = Boolean.FALSE;
-           }
-           try {
-            usuarioDAO.cambiarEstado(id, activo);
-            request.setAttribute("mensaje", "Estado del usuario actualizado correctamente");
-            listaUsuarios = usuarioDAO.obtenerUsuariosPorRolCliente();
-            request.setAttribute("listaUsuarios", listaUsuarios);
-            url = "JSP/gerente/altaBajaUsuarios.jsp";
-           } catch (SQLException ex) {
-            Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
-           }
-           
-        }else if (request.getParameter("cambiarEstadoEntrenador") != null) {
+        } else if (request.getParameter("cambiarEstadoUsuario") != null) {
             int id = Integer.parseInt(request.getParameter("id"));
             boolean activo = Boolean.TRUE;
-            String cambiarEstado = request.getParameter("cambiarEstadoEntrenador");
-            if(cambiarEstado.equals("true")){
-             activo = Boolean.TRUE;
-            }else{
-              activo = Boolean.FALSE;
+            String cambiarEstado = request.getParameter("cambiarEstadoUsuario");
+            if (cambiarEstado.equals("true")) {
+                activo = Boolean.TRUE;
+            } else {
+                activo = Boolean.FALSE;
             }
             try {
-             usuarioDAO.cambiarEstado(id, activo);
-             request.setAttribute("mensaje", "Estado del usuario actualizado correctamente");
-             listaEntrenadores = usuarioDAO.obtenerUsuariosPorRolEntrenador();
-             request.setAttribute("listaEntrenadores", listaEntrenadores);
-             url = "JSP/gerente/modificarEntrenadores.jsp";
+                usuarioDAO.cambiarEstado(id, activo);
+                request.setAttribute("mensaje", "Estado del usuario actualizado correctamente");
+                listaUsuarios = usuarioDAO.obtenerUsuariosPorRolCliente();
+                request.setAttribute("listaUsuarios", listaUsuarios);
+                url = "JSP/gerente/altaBajaUsuarios.jsp";
             } catch (SQLException ex) {
-             Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-         }else if (request.getParameter("editarEntrenador") != null) {
+
+        } else if (request.getParameter("cambiarEstadoEntrenador") != null) {
             int id = Integer.parseInt(request.getParameter("id"));
+
+            boolean activo = Boolean.TRUE;
+            String cambiarEstado = request.getParameter("cambiarEstadoEntrenador");
+            Usuario usuarioComprobacion;
+
+            if (cambiarEstado.equals("false")) {
                 try {
-                    entrenador = usuarioDAO.obtenerUsuarioPorId(id);
+                    usuarioComprobacion = usuarioDAO.obtenerUsuarioPorId(id);
+                    listaHorarios = horarioDAO.obtenerHorariosPorEntrenador(usuarioComprobacion.getId());
+
                 } catch (SQLException ex) {
                     Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                if (listaHorarios == null || listaHorarios.isEmpty()) {
+                    if (cambiarEstado.equals("true")) {
+                        activo = Boolean.TRUE;
+                    } else {
+                        activo = Boolean.FALSE;
+                    }
+                    try {
+
+                        usuarioDAO.cambiarEstado(id, activo);
+                        request.setAttribute("success", "Estado del usuario actualizado correctamente");
+                        listaEntrenadores = usuarioDAO.obtenerUsuariosPorRolEntrenador();
+                        request.setAttribute("listaEntrenadores", listaEntrenadores);
+                        url = "JSP/gerente/modificarEntrenadores.jsp";
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    request.setAttribute("error", "No se puede dar de baja al entrenador porque tiene horarios asignados");
+                    try {
+                        listaEntrenadores = usuarioDAO.obtenerUsuariosPorRolEntrenador();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    request.setAttribute("listaEntrenadores", listaEntrenadores);
+                    url = "JSP/gerente/modificarEntrenadores.jsp";
+                }
+            } else if (cambiarEstado.equals("true")) {
+                activo = Boolean.TRUE;
+                try {
+                    usuarioComprobacion = usuarioDAO.obtenerUsuarioPorId(id);
+                    usuarioDAO.cambiarEstado(id, activo);
+                    listaEntrenadores = usuarioDAO.obtenerUsuariosPorRolEntrenador();
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                request.setAttribute("success", "Estado del usuario actualizado correctamente");
+                request.setAttribute("listaEntrenadores", listaEntrenadores);
+                url = "JSP/gerente/modificarEntrenadores.jsp";
+
+            }
+
+        } else if (request.getParameter("editarEntrenador") != null) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            try {
+                entrenador = usuarioDAO.obtenerUsuarioPorId(id);
+            } catch (SQLException ex) {
+                Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+            }
             request.setAttribute("entrenador", entrenador);
             url = "JSP/gerente/editarEntrenador.jsp";
-         }else if (request.getParameter("guardarEntrenador") != null) {
+        } else if (request.getParameter("guardarEntrenador") != null) {
             try {
                 int id = Integer.parseInt(request.getParameter("id"));
                 entrenador = usuarioDAO.obtenerUsuarioPorId(id);
@@ -158,32 +194,32 @@ public class Update extends HttpServlet {
                 url = "JSP/gerente/modificarEntrenadores.jsp";
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
-            }   catch (SQLException ex) {
-                    Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
-                }
-         }else if (request.getParameter("actualizarPerfil") != null) {
+            } catch (SQLException ex) {
+                Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if (request.getParameter("actualizarPerfil") != null) {
             try {
                 usuario = usuarioDAO.obtenerUsuarioPorId(usuarioLogueado.getId());
                 DateConverter converter = new DateConverter();
                 converter.setPattern("yyyy-MM-dd");
                 ConvertUtils.register(converter, Date.class);
                 BeanUtils.populate(usuario, request.getParameterMap());
-                if(usuario.getClave().equals("")){
+                if (usuario.getClave().equals("")) {
                     usuario.setClave(usuarioLogueado.getClave());
-                }else{
+                } else {
                     usuario.setClave(Utils.md5(usuario.getClave()));
                 }
                 usuarioDAO.actualizar(usuario);
-                usuario=usuarioDAO.obtenerUsuarioPorId(usuarioLogueado.getId());
+                usuario = usuarioDAO.obtenerUsuarioPorId(usuarioLogueado.getId());
                 session.setAttribute("usuarioLogueado", usuario);
                 request.setAttribute("mensaje", "Perfil actualizado correctamente");
                 url = "JSP/usuario/perfil.jsp";
             } catch (IllegalAccessException | InvocationTargetException ex) {
                 Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
-            }   catch (SQLException ex) {
-                    Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
-                }
-         }
+            } catch (SQLException ex) {
+                Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         request.getRequestDispatcher(url).forward(request, response);
     }
 
