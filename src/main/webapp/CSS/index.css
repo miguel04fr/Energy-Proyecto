@@ -313,7 +313,9 @@ section {
     overflow: hidden;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-lg);
-    width: 60%;
+    width: 30%;
+    margin-right: 148px;
+    
 }
 
 .carousel {
@@ -1126,6 +1128,11 @@ footer {
 }
 
 @media (max-width: 576px) {
+    .carousel-container {
+        width: 100%;
+        margin-right: 0;
+    }
+
     .nav-links {
         flex-wrap: wrap;
         justify-content: center;
@@ -1275,6 +1282,9 @@ footer {
 @media screen and (max-width: 480px) {
     .hero-banner {
         padding: 20px 10px;
+    }
+    .carousel-container {
+        width: 100%;
     }
     
     .hero-content h1 {

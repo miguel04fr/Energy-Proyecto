@@ -67,15 +67,41 @@
                 </div>
                 <div class="carousel-container">
                     <div class="carousel">
-                        <c:forEach var="deporte" items="${listaDeportes}" varStatus="status">
-                            <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
-                                <img src="${contexto}/img/${deporte.nombreDeporte}.jpg" alt="${deporte.nombreDeporte}" class="imagen">
-                                <div class="carousel-caption">
-                                    <h3>${deporte.nombreDeporte}</h3>
-                                    <p>${deporte.descripcion}</p>
-                                </div>
+                        <div class="carousel-item active">
+                            <img src="${contexto}/img/Logonegro.png" alt="Oferta Especial" class="imagen">
+                            <div class="carousel-caption">
+                                <h3>¡Oferta Especial!</h3>
+                                <p>3 meses de membresía por el precio de 2. ¡Aprovecha esta oportunidad única!</p>
                             </div>
-                        </c:forEach>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="${contexto}/img/Logonegro.png" alt="Nuevas Clases" class="imagen">
+                            <div class="carousel-caption">
+                                <h3>Nuevas Clases</h3>
+                                <p>¡Próximamente! Clases de CrossFit y Yoga Aéreo. ¡Prepárate para el cambio!</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="${contexto}/img/Logonegro.png" alt="Pack Familiar" class="imagen">
+                            <div class="carousel-caption">
+                                <h3>Pack Familiar</h3>
+                                <p>Inscríbete con tu familia y obtén un 20% de descuento en todas las membresías.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="${contexto}/img/Logonegro.png" alt="Nuevo Equipamiento" class="imagen">
+                            <div class="carousel-caption">
+                                <h3>Nuevo Equipamiento</h3>
+                                <p>Hemos renovado toda nuestra sala de pesas con equipamiento de última generación.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="${contexto}/img/Logonegro.png" alt="Programa Personalizado" class="imagen">
+                            <div class="carousel-caption">
+                                <h3>Programa Personalizado</h3>
+                                <p>¡Nuevo! Programa de entrenamiento personalizado con seguimiento nutricional incluido.</p>
+                            </div>
+                        </div>
                     </div>
                     <button type="button" class="carousel-control prev" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
                     <button type="button" class="carousel-control next" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
@@ -103,7 +129,7 @@
                     <c:forEach var="deporte" items="${listaDeportes}">
                     <div class="sport-card">
                         <div class="card-image">
-                            <img src="img/${deporte.nombreDeporte}.jpg" alt="${deporte.nombreDeporte}"class="imagen">
+                            <img src="img/Logonegro.png" alt="${deporte.nombreDeporte}" class="imagen" style="width: 100%; height: 100%; object-fit: contain; display: block;">
                             <div class="card-overlay">
                                 <i class="fas fa-futbol"></i>
                             </div>
@@ -153,28 +179,28 @@
             <div class="footer-section links">
                 <h3>Enlaces Rápidos</h3>
                 <ul>
-                    <li><a href="#"><i class="fas fa-angle-right"></i> Inicio</a></li>
-                    <li><a href="#"><i class="fas fa-angle-right"></i> Deportes</a></li>
-                    <li><a href="#"><i class="fas fa-angle-right"></i> Inscripciones</a></li>
-                    <li><a href="#"><i class="fas fa-angle-right"></i> Eventos</a></li>
-                    <li><a href="#"><i class="fas fa-angle-right"></i> Contacto</a></li>
+                    <li><a href="index.jsp"><i class="fas fa-angle-right"></i> Inicio</a></li>
+                 
                 </ul>
             </div>
             <div class="footer-section social">
                 <h3>Síguenos</h3>
                 <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.twitter.com/"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.linkedin.com/"><i class="fab fa-linkedin-in"></i></a>
                 </div>
                 <div class="newsletter">
                     <h3>Suscríbete a nuestro boletín</h3>
+                        <form action="FrontController" method="post">
+
                     <div class="newsletter-form">
-                        <input type="email" placeholder="Tu email">
-                        <button type="button"><i class="fas fa-paper-plane"></i></button>
-                    </div>
+                            <input type="email" placeholder="Tu email" name="emailFooter">
+                            <button type="submit" name="boletinFooter"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -185,6 +211,48 @@
 
 
     <script src="JS/index.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentIndex = 0;
+            const items = document.querySelectorAll('.carousel-item');
+            const indicators = document.querySelectorAll('.indicator');
+            
+            function showSlide(index) {
+                items.forEach(item => item.classList.remove('active'));
+                indicators.forEach(indicator => indicator.classList.remove('active'));
+                
+                items[index].classList.add('active');
+                indicators[index].classList.add('active');
+            }
+            
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % items.length;
+                showSlide(currentIndex);
+            }
+            
+            // Auto-rotación cada 5 segundos
+            setInterval(nextSlide, 3000);
+            
+            // Controles manuales
+            document.getElementById('prevBtn').addEventListener('click', function() {
+                currentIndex = (currentIndex - 1 + items.length) % items.length;
+                showSlide(currentIndex);
+            });
+            
+            document.getElementById('nextBtn').addEventListener('click', function() {
+                currentIndex = (currentIndex + 1) % items.length;
+                showSlide(currentIndex);
+            });
+            
+            // Indicadores
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', function() {
+                    currentIndex = index;
+                    showSlide(currentIndex);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
 

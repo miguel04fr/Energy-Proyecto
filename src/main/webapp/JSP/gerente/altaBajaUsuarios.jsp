@@ -158,7 +158,6 @@
                                 <th>IBAN</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
-                                <th>Eliminar</th>
                             </tr>
                         </thead>
                         <tbody>

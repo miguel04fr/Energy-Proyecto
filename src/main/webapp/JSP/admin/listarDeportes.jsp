@@ -108,10 +108,7 @@
                 <div class="deportes-grid">
                     <c:forEach var="deporte" items="${listaDeportes}">
                         <div class="deporte-card">
-                            <img src="${pageContext.request.contextPath}/img/${deporte.nombreDeporte}.jpg" 
-                                 alt="${deporte.nombreDeporte}" 
-                                 class="deporte-imagen"
-                                 onerror="this.src='${pageContext.request.contextPath}/img/deporte_default.jpg'">
+                            <img src="${pageContext.request.contextPath}/img/Logonegro.png" alt="${deporte.nombreDeporte}" style="width: 100%; height: 100%; object-fit: contain; display: block;">
                             <div class="deporte-contenido">
                                 <h2 class="deporte-nombre">${deporte.nombreDeporte}</h2>
                                 <div class="deporte-acciones">

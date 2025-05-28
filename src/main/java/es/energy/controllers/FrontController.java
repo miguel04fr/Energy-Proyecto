@@ -29,6 +29,7 @@ import es.energy.beans.Horario;
 import es.energy.beans.Inscripcion;
 import es.energy.beans.Sala;
 import es.energy.beans.Usuario;
+import es.energy.utils.EmailUtil;
 
 /**
  *
@@ -105,6 +106,15 @@ public class FrontController extends HttpServlet {
             } catch (SQLException ex) {
                 Logger.getLogger(FrontController.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else if (request.getParameter("boletinFooter") != null) {
+            String email = request.getParameter("emailFooter");
+            String asunto = "Oferta de Energy";
+            String contenido = "Hola,\n\n" +
+                             "Gracias por suscribirte a nuestro boletín de noticias.\n\n" +
+                             "En breve recibirás información sobre nuestros productos y servicios.\n\n" +
+                             "¡Gracias por elegir Energy!";
+            
+            EmailUtil.enviarCorreo(email, asunto, contenido);
         } else if (request.getParameter("crearEntrenador") != null) {
             try {
                 listaDeportes = deporteDAO.obtenerTodosLosDeportes();

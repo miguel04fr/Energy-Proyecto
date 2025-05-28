@@ -104,6 +104,8 @@ public class Create extends HttpServlet {
                     url = "index.jsp";
                 } catch (SQLException e) {
                     // Guardar el error y los datos del formulario en la sesión
+                    request.setAttribute("tipoMensaje", "error");
+
                     request.setAttribute("error", e.getMessage());
                     url = "index.jsp";
                 }
