@@ -33,6 +33,10 @@ public interface IUsuarioDAO {
 
     public boolean existeEmail(String email) throws SQLException;
 
+    public boolean existeDNI(String dni) throws SQLException;
+
+    public boolean existeIBAN(String iban) throws SQLException;
+
     public Usuario obtenerUsuarioPorId(int id) throws SQLException;
 
     public List<Usuario> obtenerUsuariosPorEntrenador(int entrenadorId) throws SQLException;

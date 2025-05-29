@@ -178,11 +178,49 @@ public class UsuarioDAO implements IUsuarioDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    existe = rs.getInt(1) > 0; // Si el conteo es mayor que 0, existe el email
+                    existe = rs.getInt(1) > 0;
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();  // Manejo de la excepción según sea necesario
+            e.printStackTrace();
+        }
+
+        return existe;
+    }
+
+    public boolean existeDNI(String dni) {
+        boolean existe = false;
+        String sql = "SELECT COUNT(*) FROM usuarios WHERE Dni = ?";
+
+        try (Connection con = ConnectionFactory.getConnection(); PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, dni);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    existe = rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return existe;
+    }
+
+    public boolean existeIBAN(String iban) {
+        boolean existe = false;
+        String sql = "SELECT COUNT(*) FROM usuarios WHERE IBAN = ?";
+
+        try (Connection con = ConnectionFactory.getConnection(); PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, iban);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    existe = rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return existe;

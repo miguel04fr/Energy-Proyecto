@@ -359,6 +359,7 @@ section {
 }
 
 .carousel-caption p {
+    font-weight: 800;
     font-size: 1.1rem;
     opacity: 0.9;
 }

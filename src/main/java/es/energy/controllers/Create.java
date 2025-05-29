@@ -97,15 +97,36 @@ public class Create extends HttpServlet {
                 BeanUtils.populate(usuario, request.getParameterMap());
                 request.setAttribute("usuario", usuario);
                 try {
-                    request.setAttribute("success", "Usuario creado correctamente");
-                    // Encriptar la contraseña
-                    usuario.setClave(Utils.md5(usuario.getClave()));
-                    usuarioDAO.insertar(usuario);
-                    url = "index.jsp";
+                    // Verificar duplicados antes de insertar
+                    if (usuarioDAO.existeEmail(usuario.getEmail())) {
+                        request.setAttribute("tipoMensaje", "error");
+                        request.setAttribute("error", "El email ya está registrado en el sistema");
+                        url = "index.jsp";
+                    } else if (usuarioDAO.existeDNI(usuario.getDni())) {
+                        request.setAttribute("tipoMensaje", "error");
+                        request.setAttribute("error", "El DNI ya está registrado en el sistema");
+                        url = "index.jsp";
+                    } else if (usuarioDAO.existeIBAN(usuario.getIban())) {
+                        request.setAttribute("tipoMensaje", "error");
+                        request.setAttribute("error", "El IBAN ya está registrado en el sistema");
+                        url = "index.jsp";
+                    } else {
+                        request.setAttribute("success", "Usuario creado correctamente");
+                        String asunto = "Confirmación de Inscripción - Energy";
+                        String contenido = "Hola " + usuario.getNombre() + ",\n\n" +
+                                         "Se ha creado una cuenta en Energy muchas gracias por su confianza\n" +
+                                      
+                                         "¡Gracias por elegir Energy!";
+                        
+                        EmailUtil.enviarCorreo(usuario.getEmail(), asunto, contenido);
+                        // Encriptar la contraseña
+                        usuario.setClave(Utils.md5(usuario.getClave()));
+                        usuarioDAO.insertar(usuario);
+                        url = "index.jsp";
+                    }
                 } catch (SQLException e) {
                     // Guardar el error y los datos del formulario en la sesión
                     request.setAttribute("tipoMensaje", "error");
-
                     request.setAttribute("error", e.getMessage());
                     url = "index.jsp";
                 }

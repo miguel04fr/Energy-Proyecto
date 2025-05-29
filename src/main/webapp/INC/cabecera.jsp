@@ -175,7 +175,7 @@
                     </div>
                     <div class="form-group">
                         <label for="registerBirthDate"><i class="fas fa-calendar"></i> Fecha de Nacimiento</label>
-                        <input type="date" id="registerBirthDate" name="fechaNacimiento" value="${requestScope.usuario.fechaNacimiento}">
+                        <input type="date" id="registerBirthDate" name="fechaNacimiento" value="${requestScope.usuario.fechaNacimiento}" required="">
                     </div>
                 </div>
 
