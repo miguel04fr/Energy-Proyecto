@@ -316,6 +316,11 @@ public class FrontController extends HttpServlet {
         } else if (request.getParameter("misHorarios") != null) {
             try {
                 listaHorarios = horarioDAO.obtenerHorariosPorEntrenador(usuario.getId());
+                for (Horario h : listaHorarios) {
+                    h.setDeporte(deporteDAO.obtenerDeportePorId(h.getDeporteId()));
+                    h.setInscripciones(inscripcionDAO.obtenerInscripcionesPorHorario(h.getId()));
+                }
+                
                 request.setAttribute("listaHorarios", listaHorarios);
                 url = "JSP/entrenador/misHorarios.jsp";
             } catch (SQLException ex) {
@@ -323,7 +328,8 @@ public class FrontController extends HttpServlet {
             }
         } else if (request.getParameter("misAlumnos") != null) {
             try {
-                listaUsuarios = usuarioDAO.obtenerUsuariosPorEntrenador(usuario.getId());
+                listaUsuarios= usuarioDAO.obtenerUsuariosPorEntrenador(usuario.getId());
+            
                 request.setAttribute("listaUsuarios", listaUsuarios);
                 url = "JSP/entrenador/verAlumnos.jsp";
             } catch (SQLException ex) {

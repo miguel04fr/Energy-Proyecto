@@ -162,7 +162,7 @@ public class Login extends HttpServlet {
 
                 request.setAttribute("mensaje", "La contraseña se ha restablecido correctamente.");
                 request.setAttribute("tipoMensaje", "success");
-                url = "JSP/index.jsp";
+                url = "index.jsp";
             } else {
                 request.setAttribute("mensaje", "Las contraseñas no coinciden.");
                 request.setAttribute("tipoMensaje", "error");

@@ -92,7 +92,7 @@
                         <label for="clave"><i class="fas fa-lock"></i> Contraseña</label>
                         <div class="password-input">
                             <input type="password" id="clave" name="clave" required
-                                   minlength="8" maxlength="16" title="La contraseña debe tener al menos 8 caracteres, una letra y un número" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$">
+                                  >
                             <button type="button" class="toggle-password">
                                 <i class="fas fa-eye"></i>
                             </button>
@@ -103,8 +103,7 @@
                         <label for="confirmarClave"><i class="fas fa-lock"></i> Repita su contraseña</label>
                         <div class="password-input">
                             <input type="password" id="confirmarClave" name="confirmarClave" required
-                                   minlength="8" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
-                                   title="La contraseña debe tener al menos 8 caracteres, una letra y un número">
+                                  >
                             <button type="button" class="toggle-password">
                                 <i class="fas fa-eye"></i>
                             </button>

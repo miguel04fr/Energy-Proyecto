@@ -22,11 +22,13 @@ import org.apache.commons.beanutils.converters.DateConverter;
 
 import es.energy.DAO.IDeporteDAO;
 import es.energy.DAO.IHorarioDAO;
+import es.energy.DAO.IInscripcionDAO;
 import es.energy.DAO.ISalaDAO;
 import es.energy.DAO.IUsuarioDAO;
 import es.energy.DAOFactory.DAOFactory;
 import es.energy.beans.Deporte;
 import es.energy.beans.Horario;
+import es.energy.beans.Inscripcion;
 import es.energy.beans.Sala;
 import es.energy.beans.Usuario;
 import es.energy.models.Utils;
@@ -52,6 +54,7 @@ public class Update extends HttpServlet {
         HttpSession session = request.getSession();
         IDeporteDAO deporteDAO = daof.getDeporteDAO();
         IUsuarioDAO usuarioDAO = daof.getUsurioDAO();
+        IInscripcionDAO inscripcionDAO = daof.getInscripcionDAO();
         Deporte deporte = new Deporte();
         Sala sala = new Sala();
         Usuario usuario = new Usuario();
@@ -61,6 +64,7 @@ public class Update extends HttpServlet {
         ISalaDAO salaDAO = daof.getSalaDAO();
         List<Horario> listaHorarios = new ArrayList<>();
         List<Usuario> listaEntrenadores = new ArrayList<>();
+        List<Inscripcion> listaInscripciones = new ArrayList<>(); // Lista de inscripciones, si es necesario
         Usuario entrenador = new Usuario();
         Usuario usuarioLogueado = (Usuario) request.getSession().getAttribute("usuarioLogueado");
         if (request.getParameter("actualizarSala") != null) {
@@ -101,6 +105,29 @@ public class Update extends HttpServlet {
                 activo = Boolean.TRUE;
             } else {
                 activo = Boolean.FALSE;
+                try {
+                    Usuario usuarioComprobacion =  usuarioDAO.obtenerUsuarioPorId(id);
+                    listaInscripciones = inscripcionDAO.obtenerInscripcionesPorUsuario(usuarioComprobacion.getId());
+                    for (Inscripcion inscripcion : listaInscripciones) {
+                        try {
+                            Horario horario = horarioDAO.obtenerHorarioPorId(inscripcion.getHorarioId());
+                            horario.setPlazasOcupadas(horario.getPlazasOcupadas() - 1);
+                            horarioDAO.actualizarHorario(horario);
+                             // Eliminar la inscripción del usuario
+                            // Eliminar inscripciones del usuario antes de cambiar su estado
+                            // Esto es necesario para evitar inconsistencias en la base de datos
+                            inscripcionDAO.eliminarInscripcion(inscripcion.getId());
+                            
+                        } catch (SQLException ex) {
+                            Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(Update.class.getName()).log(Level.SEVERE, null, ex);
+                }
+               
+
             }
             try {
                 usuarioDAO.cambiarEstado(id, activo);

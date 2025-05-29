@@ -181,20 +181,13 @@
                                     <td>
                                         <form action="FrontController" method="post">
                                             <input type="hidden" name="idhorario" value="${horario.id}">
+                                            <input type="hidden" name="verAlumnos" value="true">
                                         <button class="btn btn-info btn-sm" type="submit" data-bs-toggle="collapse" 
-                                                data-bs-target="#alumnos${horario.id}" aria-expanded="false" name="verAlumnos">
+                                                 aria-expanded="false" name="verAlumnos" value="${horario.id}">
                                             <i class="fas fa-users"></i> Ver Alumnos (${horario.plazasOcupadas})
                                         </button>
                                         </form>
-                                        <div class="collapse mt-2" id="alumnos${horario.id}">
-                                            <div class="card card-body">
-                                                <c:forEach var="inscripcion" items="${horario.inscripciones}">
-                                                    <div class="alumno-item">
-                                                        ${inscripcion.usuario.nombre} ${inscripcion.usuario.apellido}
-                                                    </div>
-                                                </c:forEach>
-                                            </div>
-                                        </div>
+                                  
                                     </td>
                                 </tr>
                             </c:forEach>

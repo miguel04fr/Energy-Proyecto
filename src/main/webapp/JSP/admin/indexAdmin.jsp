@@ -28,12 +28,12 @@
                     <div class="carousel">
                         <c:forEach var="deporte" items="${listaDeportes}" varStatus="status">
                             <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
-                                <img src="${contexto}/img/${deporte.nombreDeporte}.jpg" alt="${deporte.nombreDeporte}" class="imagen">
-                                <div class="carousel-caption">
-                                    <h3>${deporte.nombreDeporte}</h3>
-                                    <p>${deporte.descripcion}</p>
-                                </div>
+                                <img src="${contexto}/img/Logonegro.png" alt="Programa Personalizado" class="imagen">
+                            <div class="carousel-caption">
+                                <h3>Programa Personalizado</h3>
+                                <p>¡Nuevo! Programa de entrenamiento personalizado con seguimiento nutricional incluido.</p>
                             </div>
+                        </div>
                         </c:forEach>
                     </div>
                     <button type="button" class="carousel-control prev" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
@@ -62,7 +62,7 @@
                     <c:forEach var="deporte" items="${listaDeportes}">
                     <div class="sport-card">
                         <div class="card-image">
-                            <img src="${contexto}/img/${deporte.nombreDeporte}.jpg" alt="${deporte.nombreDeporte}"class="imagen">
+                            <img src="img/Logonegro.png" alt="${deporte.nombreDeporte}" class="imagen" style="width: 100%; height: 100%; object-fit: contain; display: block;">
                             <div class="card-overlay">
                                 <i class="fas fa-futbol"></i>
                             </div>

@@ -196,7 +196,7 @@
                 <div class="form-group">
                     <label for="registerPassword"><i class="fas fa-lock"></i> Contraseña</label>
                     <div class="password-input">
-                        <input type="password" id="registerPassword" name="clave" value="" minlength="8" maxlength="16" title="La contraseña debe tener al menos 8 caracteres, una letra y un número" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$">
+                        <input type="password" id="registerPassword" name="clave" value=""required >
                         <button type="button" class="toggle-password"><i class="fas fa-eye"></i></button>
                     </div>
                 </div>
@@ -204,7 +204,7 @@
                 <div class="form-group">
                     <label for="registerPasswordConfirm"><i class="fas fa-lock"></i> Confirmar Contraseña</label>
                     <div class="password-input">
-                        <input type="password" id="registerPasswordConfirm" value="" minlength="8" maxlength="16" title="La contraseña debe tener al menos 8 caracteres, una letra y un número" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$">
+                        <input type="password" id="registerPasswordConfirm" value=""  required>
                         <button type="button" class="toggle-password"><i class="fas fa-eye"></i></button>
                     </div>
                 </div>

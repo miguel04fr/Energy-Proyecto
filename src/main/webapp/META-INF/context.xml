@@ -5,7 +5,7 @@
     auth="Container"
     type="javax.sql.DataSource"
     driverClassName="com.mysql.cj.jdbc.Driver"
-    url="jdbc:mysql://informatica.iesalbarregas.com/Energy"
+    url="jdbc:mysql://informatica.iesalbarregas.com:7004/Energy"
     username="folguera"
     password="09224236V"
     maxTotal="100"

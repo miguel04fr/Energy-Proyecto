@@ -315,7 +315,7 @@ section {
     box-shadow: var(--shadow-lg);
     width: 30%;
     margin-right: 148px;
-    
+
 }
 
 .carousel {
@@ -367,20 +367,22 @@ section {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.2);
-    color: white;
+    background-color: rgb(8 0 0 / 20%);
+    color: #ff0000;
     border: none;
     width: 50px;
     height: 50px;
     border-radius: 50%;
     font-size: 1.2rem;
-    display: flex;
+    display: flex
+        ;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: var(--transition);
     backdrop-filter: blur(5px);
     z-index: 10;
+
 }
 
 .carousel-control:hover {
@@ -1179,7 +1181,7 @@ footer {
     .hero-banner {
         padding: 80px 20px;
     }
-    
+
     .sports-container {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -1189,19 +1191,19 @@ footer {
     .hero-banner {
         padding: 60px 15px;
     }
-    
+
     .sports-container {
         grid-template-columns: repeat(2, 1fr);
     }
-    
+
     .carousel-item {
         height: 300px;
     }
-    
+
     .carousel-caption h3 {
         font-size: 1.5rem;
     }
-    
+
     .carousel-caption p {
         font-size: 1rem;
     }
@@ -1211,29 +1213,29 @@ footer {
     .hero-banner {
         padding: 40px 10px;
     }
-    
+
     .hero-content h1 {
         font-size: 2rem;
     }
-    
+
     .hero-content p {
         font-size: 1rem;
     }
-    
+
     .sports-container {
         grid-template-columns: 1fr;
         width: 269px;
     }
-    
+
     .carousel-item {
         height: 250px;
     }
-    
+
     .carousel-control {
         width: 40px;
         height: 40px;
     }
-    
+
     .carousel-indicators {
         bottom: 10px;
     }
@@ -1243,35 +1245,35 @@ footer {
     .hero-banner {
         padding: 30px 10px;
     }
-    
+
     .hero-content h1 {
         font-size: 1.8rem;
     }
-    
+
     .carousel-item {
         height: 200px;
     }
-    
+
     .carousel-caption h3 {
         font-size: 1.2rem;
     }
-    
+
     .carousel-caption p {
         font-size: 0.9rem;
     }
-    
+
     .sport-card {
         margin: 10px;
     }
-    
+
     .card-content h3 {
         font-size: 1.2rem;
     }
-    
+
     .card-content p {
         font-size: 0.9rem;
     }
-    
+
     .sport-btn {
         padding: 8px 15px;
         font-size: 0.9rem;
@@ -1286,47 +1288,47 @@ footer {
     .carousel-container {
         width: 100%;
     }
-    
+
     .hero-content h1 {
         font-size: 1.5rem;
     }
-    
+
     .hero-content p {
         font-size: 0.9rem;
     }
-    
+
     .carousel-item {
         height: 180px;
     }
-    
+
     .carousel-caption {
         padding: 5px;
     }
-    
+
     .carousel-caption h3 {
         font-size: 1rem;
     }
-    
+
     .carousel-caption p {
         font-size: 0.8rem;
     }
-    
+
     .sport-card {
         margin: 5px;
     }
-    
+
     .card-content {
         padding: 10px;
     }
-    
+
     .card-content h3 {
         font-size: 1.1rem;
     }
-    
+
     .card-content p {
         font-size: 0.8rem;
     }
-    
+
     .sport-btn {
         padding: 6px 12px;
         font-size: 0.8rem;

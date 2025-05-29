@@ -5,6 +5,7 @@
 package es.energy.beans;
 
 import java.sql.Time;
+import java.util.List;
 
 /**
  *
@@ -24,6 +25,7 @@ public class Horario {
     private Usuario usuario;
     private Inscripcion inscripcion;
     private boolean tieneClaseEnMismoHorario;
+    List<Inscripcion> inscripciones;
 
     public Horario() {
     }
@@ -43,6 +45,7 @@ public class Horario {
         return id;
     }
 
+    
     public void setId(int id) {
         this.id = id;
     }
@@ -133,5 +136,11 @@ public class Horario {
 
     public void setTieneClaseEnMismoHorario(boolean tieneClaseEnMismoHorario) {
         this.tieneClaseEnMismoHorario = tieneClaseEnMismoHorario;
+    }
+    public List<Inscripcion> getInscripciones() {
+        return inscripciones;
+    }
+    public void setInscripciones(List<Inscripcion> inscripciones) {
+        this.inscripciones = inscripciones;
     }
 }
