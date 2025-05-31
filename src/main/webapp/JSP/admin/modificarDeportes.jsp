@@ -87,7 +87,7 @@
                                                
                                                     <form action="Delete" method="POST" style="display: inline;">
                                                         <input type="hidden" name="id" value="${deporte.id}">
-                                                        <button type="submit" class="btn btn-danger btn-sm" name="eliminarDeporte" onclick="return confirm('¿Estás seguro de que deseas eliminar este deporte?')">
+                                                        <button type="submit" class="btn btn-danger btn-sm" name="eliminarDeporte" onclick="return confirm('¿Estás seguro de que deseas eliminar este deporte?, si hay algiuna inscripcion con este deporte se borrara')">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
                                                     </form>

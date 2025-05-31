@@ -57,7 +57,6 @@
                         <button type="submit" name="listarEntrenadores" value="listarEntrenadores">Entrenadores</button>
                         <button type="submit" name="modificarEntrenadores" value="modificarEntrenadores">Modificar Entrenadores</button>
                         <button type="submit" name="darAltaBaja" value="darAltaBaja">Gestion Clientes</button>
-                        <button type="submit" name="crearCliente" value="crearCliente">Crear Cliente</button>
                     </c:if>
                 </c:if>
             
@@ -175,7 +174,7 @@
                     </div>
                     <div class="form-group">
                         <label for="registerBirthDate"><i class="fas fa-calendar"></i> Fecha de Nacimiento</label>
-                        <input type="date" id="registerBirthDate" name="fechaNacimiento" value="${requestScope.usuario.fechaNacimiento}" required="">
+                        <input type="date" id="registerBirthDate" name="fechaNacimiento" value="${requestScope.usuario.fechaNacimiento}">
                     </div>
                 </div>
 

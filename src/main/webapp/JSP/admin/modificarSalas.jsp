@@ -81,7 +81,7 @@
                                                 <td>
                                                     <form action="Delete" method="POST" style="display: inline;">
                                                         <input type="hidden" name="idSala" value="${sala.idSala}">
-                                                        <button type="submit" class="btn btn-danger btn-sm" name="eliminarSala" onclick="return confirm('¿Estás seguro de que deseas eliminar esta sala?')">
+                                                        <button type="submit" class="btn btn-danger btn-sm" name="eliminarSala" onclick="return confirm('¿Estás seguro de que deseas eliminar esta sala?, si hay alguna inscripción con esta sala se borrará')">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
                                                     </form>

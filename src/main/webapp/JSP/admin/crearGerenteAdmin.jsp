@@ -92,9 +92,7 @@
                         <label for="clave"><i class="fas fa-lock"></i> Contraseña</label>
                         <div class="password-input">
                             <input type="password" id="clave" name="clave" required>
-                            <button type="button" class="toggle-password">
-                                <i class="fas fa-eye"></i>
-                            </button>
+                          
                         </div>
                     </div>
 
@@ -102,9 +100,7 @@
                         <label for="confirmarClave"><i class="fas fa-lock"></i> Repita su contraseña</label>
                         <div class="password-input">
                             <input type="password" id="confirmarClave" name="confirmarClave" required>
-                            <button type="button" class="toggle-password">
-                                <i class="fas fa-eye"></i>
-                            </button>
+                          
                         </div>
                         <div id="passwordError" class="error-message" style="display: none; color: #dc3545; font-size: 0.875em; margin-top: 5px;">
                             Las contraseñas no coinciden

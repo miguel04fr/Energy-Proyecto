@@ -93,9 +93,7 @@
                         <div class="password-input">
                             <input type="password" id="clave" name="clave" required
                                   >
-                            <button type="button" class="toggle-password">
-                                <i class="fas fa-eye"></i>
-                            </button>
+                           
                         </div>
                     </div>
 
@@ -104,9 +102,7 @@
                         <div class="password-input">
                             <input type="password" id="confirmarClave" name="confirmarClave" required
                                   >
-                            <button type="button" class="toggle-password">
-                                <i class="fas fa-eye"></i>
-                            </button>
+                            
                         </div>
                         <div id="passwordError" class="error-message" style="display: none; color: #dc3545; font-size: 0.875em; margin-top: 5px;">
                             Las contraseñas no coinciden
