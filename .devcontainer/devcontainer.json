@@ -1,20 +1,8 @@
 {
-    "name": "Java WebApp (Maven + Tomcat)",
-    "image": "mcr.microsoft.com/devcontainers/java:17",
-    "features": {
-      "ghcr.io/devcontainers/features/maven:1": {}
-    },
-    "forwardPorts": [8080],
-    "portsAttributes": {
-      "8080": { "label": "WebApp", "onAutoForward": "openBrowser" }
-    },
-    "postCreateCommand": "mvn clean package",
-    "postStartCommand": "mvn tomcat7:run",
-    "customizations": {
-      "vscode": {
-        "extensions": ["vscjava.vscode-java-pack"]
-      }
-    }
-  }
-  
-  
+  "name": "Java JSP Project",
+  "image": "mcr.microsoft.com/devcontainers/java:17",
+  "features": {
+    "ghcr.io/devcontainers/features/maven:1": {}
+  },
+  "postCreateCommand": "mvn clean package"
+}
